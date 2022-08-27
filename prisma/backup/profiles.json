@@ -2,13 +2,17 @@
   "_id": {
     "$oid": "63046ef49044a39fa2e8de7c"
   },
-  "role": "user",
   "name": {
     "first_name": "Akhmad Nur",
     "last_name": "Hidayat"
   },
   "username": "akhmadnurh",
   "password": "enkripsi_bang",
-  "linkedin_url": "adwjdoiawd",
-  "email": "07akhmadnur@gmail.com"
+  "email": "07akhmadnur@gmail.com",
+  "noHp": "082339884778",
+  "location": "Jember",
+  "age":"29",
+  "gender":"cowo",
+  "status":"student",
+  "nationality": "indonesia"
 }]
