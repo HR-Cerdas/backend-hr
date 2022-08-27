@@ -1,13 +1,9 @@
 var express = require("express");
-const { Register, nyoba } = require("../controller/hrUsers");
+const { Register, nyoba, Login } = require("../controller/hrUsers");
 var router = express.Router();
-
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
-});
 
 router.post("/registerHr", Register);
 router.get("/nyoba", nyoba);
+router.post("/loginHr", Login);
 
 module.exports = router;

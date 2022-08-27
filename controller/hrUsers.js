@@ -24,9 +24,33 @@ const Register = async (req, res) => {
       noHp: noHp,
     });
 
-    res.status(201).json({ status: "Created", msg: "Register Berhasil" });
+    res.json({ status: "Created", msg: regis });
   } catch (error) {
     res.status(404).json({ msg: error });
+  }
+};
+const Login = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const findUsername = await db.profilehrs.findFirst({
+      where: {
+        email: email,
+      },
+    });
+    if (!findUsername)
+      throw { message: "email is incorrect", status: "Bad Request", code: 400 };
+
+    if (findUsername.password === password) {
+      return res.status(200).json({
+        msg: "yes",
+      });
+    }
+    return res.status(400).json({
+      status: "Bad Request",
+      message: "password is incorrect",
+    });
+  } catch (error) {
+    next(error);
   }
 };
 const nyoba = async (req, res) => {
@@ -38,4 +62,4 @@ const nyoba = async (req, res) => {
   }
 };
 
-module.exports = { Register, nyoba };
+module.exports = { Register, nyoba, Login };
