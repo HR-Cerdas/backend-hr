@@ -86,7 +86,7 @@ const login = async (req, res, next) => {
     if (passwordTrue) {
       const payload = {
         id: findEmail.id,
-        name: findEmail.username,
+        username: findEmail.username,
       };
 
       const token = signToken(payload);
