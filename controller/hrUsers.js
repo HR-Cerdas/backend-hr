@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const { MongoClient } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
+const jwt = require("jsonwebtoken");
 const { signToken, checkPassword } = require("../misc/auth");
 
 const register = async (req, res, next) => {
@@ -63,6 +64,7 @@ const register = async (req, res, next) => {
       password: hashPassword,
       email: email,
       noHp: noHp,
+      resetPasswordLink: "",
     });
     // Register Input End
 
@@ -102,6 +104,46 @@ const login = async (req, res, next) => {
     next(error);
   }
 };
+
+const forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    // Cari email di collection profilehrs Start
+    const findEmail = await db.collection("profilehrs").findOne({
+      email: email,
+    });
+    // Cari email di collection profilehrs End
+
+    // Cek Email apakah telah terdaftar Start
+    if (!findEmail)
+      throw {
+        message: "Email Tidak Terdaftar",
+        status: "Bad Request",
+        code: 400,
+      };
+    // Cek Email apakah telah terdaftar End
+    // const cek = tokenCheck(findEmail);
+    const tokenCheck = jwt.sign(
+      { iduser: findEmail._id },
+      process.env.JWT_SECRET
+    );
+    const lol = await db
+      .collection("profilehrs")
+      .updateOne(
+        { _id: findEmail._id },
+        { $set: { resetPasswordLink: tokenCheck } }
+      );
+    return res.status(200).json({
+      message: "Berhasil Update",
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: "Bad Request",
+      message: error,
+    });
+  }
+};
+
 const nyoba = async (req, res) => {
   try {
     const getData = await db.collection("profilehrs").find().toArray();
@@ -112,4 +154,4 @@ const nyoba = async (req, res) => {
   }
 };
 
-module.exports = { nyoba, register, login };
+module.exports = { nyoba, register, login, forgotPassword };
