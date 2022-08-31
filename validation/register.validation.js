@@ -11,30 +11,35 @@ module.exports = (req, res, next) => {
     username,
     confPassword,
   } = req.body;
+  // Validation form First Name Tidak Boleh Kosong
   if (!first_name)
     return response.Fail(
       response.BadRequest,
       "Bad Request",
       "First Name tidak boleh kosong"
     );
+  // Validation form Last Name Tidak Boleh Kosong
   if (!last_name)
     return response.Fail(
       response.BadRequest,
       "Bad Request",
       "Last Name tidak boleh kosong"
     );
+  // Validation form Email Tidak Boleh Kosong
   if (!email)
     return response.Fail(
       response.BadRequest,
       "Bad Request",
       "email tidak boleh kosong"
     );
+  // Validation form NoHP Tidak Boleh Kosong
   if (!noHp)
     return response.Fail(
       response.BadRequest,
       "Bad Request",
       "No HP tidak boleh kosong"
     );
+  // Validation format Input Password Start
   if (!password)
     return response.Fail(
       response.BadRequest,
@@ -127,6 +132,6 @@ module.exports = (req, res, next) => {
       "Bad Request",
       "password tidak boleh mengandung spasi"
     );
-
+  // Validation format Input Password End
   next();
 };
