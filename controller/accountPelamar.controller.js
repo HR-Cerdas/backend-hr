@@ -21,7 +21,7 @@ const register = async (req, res, next) => {
   try {
     // Check Email Ready Start
     const findEmail = await db
-      .collection("profilehrs")
+      .collection("profilepelamar")
       .findOne({ email: email });
     if (findEmail)
       throw {
@@ -33,7 +33,7 @@ const register = async (req, res, next) => {
 
     // Check Email Ready Start
     const findUsername = await db
-      .collection("profilehrs")
+      .collection("profilepelamar")
       .findOne({ username: username });
     if (findUsername)
       throw {
@@ -58,7 +58,7 @@ const register = async (req, res, next) => {
     // Create hash Password End
 
     // Register Input Start
-    const regis = await db.collection("profilehrs").insertOne({
+    const regis = await db.collection("profilepelamar").insertOne({
       name: {
         first_name: first_name,
         last_name: last_name,
@@ -81,7 +81,7 @@ const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     // Check Data by Email Start
-    const findEmail = await db.collection("profilehrs").findOne({
+    const findEmail = await db.collection("profilepelamar").findOne({
       email: email,
     });
     if (!findEmail)
@@ -92,7 +92,7 @@ const login = async (req, res, next) => {
     const passwordTrue = checkPassword(password, findEmail.password);
     if (passwordTrue) {
       const payload = {
-        id: findEmail.id,
+        id: findEmail._id,
         username: findEmail.username,
       };
 
@@ -115,11 +115,11 @@ const login = async (req, res, next) => {
 const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
   try {
-    // Cari email di collection profilehrs Start
-    const findEmail = await db.collection("profilehrs").findOne({
+    // Cari email di collection profilepelamar Start
+    const findEmail = await db.collection("profilepelamar").findOne({
       email: email,
     });
-    // Cari email di collection profilehrs End
+    // Cari email di collection profilepelamar End
 
     // Cek Email apakah telah terdaftar Start
     if (!findEmail)
@@ -136,7 +136,7 @@ const forgotPassword = async (req, res, next) => {
 
     // Create Update Document Start
     await db
-      .collection("profilehrs")
+      .collection("profilepelamar")
       .updateOne({ _id: findEmail._id }, { $set: { resetPasswordLink: cek } });
     // Create Update Document End
 
@@ -165,8 +165,8 @@ const forgotPassword = async (req, res, next) => {
 
 const getToken = async (req, res, next) => {
   try {
-    const find = await db.collection("profilehrs").find().toArray();
-    // Cari email di collection profilehrs End
+    const find = await db.collection("profilepelamar").find().toArray();
+    // Cari email di collection profilepelamar End
     // Cek Email apakah telah terdaftar Start
     return res.status(200).json({
       data: find,
@@ -182,11 +182,11 @@ const getToken = async (req, res, next) => {
 const resetPassword = async (req, res, next) => {
   const { token, password, confPassword } = req.body;
   try {
-    // Cari Token di collection profilehrs Start
-    const findToken = await db.collection("profilehrs").findOne({
+    // Cari Token di collection profilepelamar Start
+    const findToken = await db.collection("profilepelamar").findOne({
       resetPasswordLink: token,
     });
-    // Cari Token di collection profilehrs End
+    // Cari Token di collection profilepelamar End
 
     // Check Password Confirm Start
     if (password !== confPassword)
@@ -205,7 +205,7 @@ const resetPassword = async (req, res, next) => {
     // Create Update Document Start
     if (findToken) {
       await db
-        .collection("profilehrs")
+        .collection("profilepelamar")
         .updateOne(
           { _id: findToken._id },
           { $set: { password: hashResetPassword, resetPasswordLink: "" } }
@@ -223,18 +223,8 @@ const resetPassword = async (req, res, next) => {
     });
   }
 };
-const nyoba = async (req, res) => {
-  try {
-    const getData = await db.collection("profilehrs").find().toArray();
-
-    res.status(200).json({ msg: getData });
-  } catch (error) {
-    res.status(404).json({ msg: "Not Found" });
-  }
-};
 
 module.exports = {
-  nyoba,
   register,
   login,
   forgotPassword,

@@ -4,12 +4,11 @@ const { userEmail, pws } = process.env;
 exports.kirimEmail = dataEmail => {
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    requireTLS: true,
+    port: 465,
+    secure: true, // true for 465, false for other ports
     auth: {
       user: userEmail, // generated ethereal user
-      pass: pws, // generated ethereal password Password email generate [qdeznlspadpzbgnv]
+      pass: pws, // generated ethereal password
     },
   });
   return transporter
