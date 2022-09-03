@@ -1,13 +1,12 @@
 const express = require("express");
 // Get Module Controller Start
 const {
-  nyoba,
   register,
   login,
   forgotPassword,
   resetPassword,
   getToken,
-} = require("../controller/hrUsers");
+} = require("../controller/accountPelamar.controller");
 const router = express.Router();
 // Get Module Controller End
 
@@ -19,16 +18,15 @@ const resetPasswordValidation = require("../validation/resetPassword.validation"
 // Validation End
 const regisSanitize = require("../sanitize/register.sanitize");
 
-// Register Hr
+// Register Pelamar
 router.post("/register", regisValidation, regisSanitize, register);
-// Login Hr
+// Login Pelamar
 router.post("/login", loginValidation, login);
-// Forgot Password Account Hr
+// Forgot Password Account Pelamar
 router.put("/gantiPassword", forgotPasswordValidation, forgotPassword);
-// Reset old password to new password Account Hr
+// Reset old password to new password Account Pelamar
 router.put("/resetPassword", resetPasswordValidation, resetPassword);
 // Percobaan
 router.get("/getToken", getToken);
-router.get("/nyoba", nyoba);
 
 module.exports = router;

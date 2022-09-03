@@ -1,12 +1,22 @@
 var express = require("express");
 var router = express.Router();
 
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Express" });
+});
+
 // Panggil Route Start
-const hr = require("./hr");
+const hr = require("./hr.route");
+const pelamar = require("./pelamar.router");
+const nyoba = require("./nyoba.route");
 // Panggil Route End
 
+const authHeader = require("../misc/auth.header");
+
 // use Route Start
-router.use("/HR", hr);
+router.use("/hr", hr);
+router.use("/pelamar", pelamar);
+router.use("/", authHeader, nyoba);
 // use Route End
 
 module.exports = router;
