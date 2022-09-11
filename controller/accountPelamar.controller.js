@@ -144,7 +144,7 @@ const forgotPassword = async (req, res, next) => {
     const templateEmail = {
       from: "Andromedia", // sender address
       to: email, // list of receivers
-      subject: "Hello ✔", // Subject line
+      subject: "Hello ✔", // Subject linew
       text: "Hello world?", // plain text body
       html: "<p>Silahkan klick tombol di bawah untuk mengganti Password</p> <form action=`${process.env.CLIENT_URL}/resetpassword/${cek}`><input type='submit' value='Reset Password' /></form>",
     };
