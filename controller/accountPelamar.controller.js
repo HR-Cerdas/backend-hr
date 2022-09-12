@@ -85,7 +85,10 @@ const login = async (req, res, next) => {
       email: email,
     });
     if (!findEmail)
-      throw { message: "Email Salah", status: "Bad Request", code: 400 };
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "email tidak ditemukan",
+      });
     // Check Data by Email End
 
     // Check Password True & login Start
@@ -103,7 +106,7 @@ const login = async (req, res, next) => {
     }
     // Check Password True & login End
 
-    return res.status(400).json({
+    return res.status(404).json({
       status: "Bad Request",
       message: "Password salah",
     });
