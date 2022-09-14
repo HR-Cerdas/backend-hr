@@ -116,6 +116,7 @@ const updateAbout = async (req, res, next) => {
 const addWorkExperience = async (req, res, next) => {
   const { username } = req.user;
   const { jobPosition, company, startDate, endDate } = req.body;
+
   try {
     const findAccountPelamar = await db.collection("profilepelamar").findOne({
       username: username,
@@ -169,10 +170,70 @@ const addWorkExperience = async (req, res, next) => {
     });
   }
 };
+const addEducation = async (req, res, next) => {
+  const { username } = req.user;
+  const { lembaga, gelar, bidangStudy, startDate, endDate } = req.body;
+
+  try {
+    const findAccountPelamar = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findAccountPelamar)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+    if (findAccountPelamar.addEducation === undefined) {
+      const updateExperience = await db.collection("profilepelamar").updateOne(
+        { _id: findAccountPelamar._id },
+        {
+          $set: {
+            addEducation: [
+              {
+                lembaga: lembaga,
+                gelar: gelar,
+                bidangStudy: bidangStudy,
+                startDate: moment.utc(startDate),
+                endDate: moment.utc(endDate),
+              },
+            ],
+          },
+        }
+      );
+    } else {
+      await db.collection("profilepelamar").updateOne(
+        { _id: findAccountPelamar._id },
+        {
+          $push: {
+            addEducation: {
+              $each: [
+                {
+                  lembaga: lembaga,
+                  gelar: gelar,
+                  bidangStudy: bidangStudy,
+                  startDate: moment.utc(startDate),
+                  endDate: moment.utc(endDate),
+                },
+              ],
+            },
+          },
+        }
+      );
+    }
+    return res.status(200).json({
+      msg: "berhasil Update Education",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
 
 module.exports = {
   getDetailProfil,
   editDetailProfil,
   updateAbout,
   addWorkExperience,
+  addEducation,
 };
