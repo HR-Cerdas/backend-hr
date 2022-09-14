@@ -3,6 +3,9 @@ const { MongoClient } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
 
+const moment = require("moment");
+require("mongodb-moment")(moment);
+
 // Get All Data Sesuai User Login
 const getDetailProfil = async (req, res, next) => {
   // ambil data req
@@ -80,7 +83,7 @@ const editDetailProfil = async (req, res, next) => {
   }
 };
 // Get AboutMe Sesuai User Login
-const getAbout = async (req, res, next) => {
+const updateAbout = async (req, res, next) => {
   const { username } = req.user;
   const { aboutme } = req.body;
   try {
@@ -105,14 +108,71 @@ const getAbout = async (req, res, next) => {
       msg: "berhasil Update Bio Aboutme",
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(404).json({
       status: "Bad Request",
-      message: "data pelamar tidak ditemukan",
     });
   }
 };
+const addWorkExperience = async (req, res, next) => {
+  const { username } = req.user;
+  const { jobPosition, company, startDate, endDate } = req.body;
+  try {
+    const findAccountPelamar = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findAccountPelamar)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+    if (findAccountPelamar.workExperience === undefined) {
+      const updateExperience = await db.collection("profilepelamar").updateOne(
+        { _id: findAccountPelamar._id },
+        {
+          $set: {
+            workExperience: [
+              {
+                jobosition: jobPosition,
+                company: company,
+                startDate: moment.utc(startDate),
+                endDate: moment.utc(endDate),
+              },
+            ],
+          },
+        }
+      );
+    } else {
+      await db.collection("profilepelamar").updateOne(
+        { _id: findAccountPelamar._id },
+        {
+          $push: {
+            workExperience: {
+              $each: [
+                {
+                  jobosition: jobPosition,
+                  company: company,
+                  startDate: moment.utc(startDate),
+                  endDate: moment.utc(endDate),
+                },
+              ],
+            },
+          },
+        }
+      );
+    }
+    return res.status(200).json({
+      msg: "berhasil Update work experience",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+
 module.exports = {
   getDetailProfil,
   editDetailProfil,
-  getAbout,
+  updateAbout,
+  addWorkExperience,
 };
