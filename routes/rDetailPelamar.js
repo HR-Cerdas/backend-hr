@@ -7,6 +7,7 @@ const {
   updateAbout,
   addWorkExperience,
   addEducation,
+  addSkill,
 } = require("../controller/cDetailPelamar");
 
 const validationEditDetailPelamar = require("../validation/vDetailPelamar");
@@ -16,7 +17,8 @@ router.get("/getalldetail", getDetailProfil);
 // Edit Detail Data Pelamar
 router.put("/editdetailpelamar", validationEditDetailPelamar, editDetailProfil);
 router.get("/getAbout", updateAbout);
-router.post("/addexperience", addWorkExperience);
-router.post("/addeducation", addEducation);
+router.put("/addexperience", addWorkExperience);
+router.put("/addeducation", addEducation);
+router.put("/addskill", addSkill);
 
 module.exports = router;

@@ -229,11 +229,60 @@ const addEducation = async (req, res, next) => {
     });
   }
 };
-
+const addSkill = async (req, res, next) => {
+  const { username } = req.user;
+  const { skill } = req.body;
+  try {
+    const findAccountPelamar = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findAccountPelamar)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+    if (findAccountPelamar.skills === undefined) {
+      const updateSkill = await db.collection("profilepelamar").updateOne(
+        { _id: findAccountPelamar._id },
+        {
+          $set: {
+            skills: skill,
+          },
+        }
+      );
+    } else {
+      const ontol = await db
+        .collection("profilepelamar")
+        .find({ _id: findAccountPelamar._id })
+        .project({
+          skills: 1,
+        })
+        .toArray();
+      const value = new Set([...ontol[0].skills, ...skill]);
+      await db.collection("profilepelamar").updateOne(
+        { _id: findAccountPelamar._id },
+        {
+          $set: {
+            skills: [...value],
+          },
+        },
+        { upsert: true }
+      );
+    }
+    return res.status(200).json({
+      msg: "berhasil Update Skill",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
 module.exports = {
   getDetailProfil,
   editDetailProfil,
   updateAbout,
   addWorkExperience,
   addEducation,
+  addSkill,
 };
