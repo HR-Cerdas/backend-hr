@@ -10,6 +10,8 @@ const {
   addSkill,
   addJobInterests,
   addResume,
+  addSosialMedia,
+  addOrganization,
 } = require("../controller/cDetailPelamar");
 
 const validationEditDetailPelamar = require("../validation/vDetailPelamar");
@@ -25,5 +27,7 @@ router.put("/addeducation", addEducation);
 router.put("/addskill", addSkill);
 router.put("/addjob", addJobInterests);
 router.put("/addresume", uploadCv.single("cv"), addResume);
+router.put("/addsosialmedia", addSosialMedia);
+router.put("/addorganization", addOrganization);
 
 module.exports = router;

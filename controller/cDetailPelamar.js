@@ -337,9 +337,107 @@ const addResume = async (req, res, next) => {
         status: "Bad Request",
         message: "data pelamar tidak ditemukan",
       });
-    console.log(cv);
+    await db.collection("profilepelamar").updateOne(
+      { _id: findAccountPelamar._id },
+      {
+        $set: {
+          fileCV: cv.path,
+        },
+      }
+    );
     return res.status(200).json({
       msg: "berhasil Update Job",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+const addSosialMedia = async (req, res, next) => {
+  const { facebook, twitter, instagram, linkedin } = req.body;
+  const { username } = req.user;
+  try {
+    const findAccountPelamar = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findAccountPelamar)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+    const updateSosialMedia = await db.collection("profilepelamar").updateOne(
+      { _id: findAccountPelamar._id },
+      {
+        $set: {
+          sosialMedia: {
+            facebook: facebook,
+            twitter: twitter,
+            instagram: instagram,
+            linkedin: linkedin,
+          },
+        },
+      }
+    );
+    return res.status(200).json({
+      msg: "berhasil Update Sosial Media",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+const addOrganization = async (req, res, next) => {
+  const { username } = req.user;
+  const { organizationName, Role, startDate, endDate } = req.body;
+
+  try {
+    const findAccountPelamar = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findAccountPelamar)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+    if (findAccountPelamar.addorganization === undefined) {
+      const updateExperience = await db.collection("profilepelamar").updateOne(
+        { _id: findAccountPelamar._id },
+        {
+          $set: {
+            addorganization: [
+              {
+                organizationName: organizationName,
+                Role: Role,
+                startDate: moment.utc(startDate),
+                endDate: moment.utc(endDate),
+              },
+            ],
+          },
+        }
+      );
+    } else {
+      await db.collection("profilepelamar").updateOne(
+        { _id: findAccountPelamar._id },
+        {
+          $push: {
+            addorganization: {
+              $each: [
+                {
+                  organizationName: organizationName,
+                  Role: Role,
+                  startDate: moment.utc(startDate),
+                  endDate: moment.utc(endDate),
+                },
+              ],
+            },
+          },
+        }
+      );
+    }
+    return res.status(200).json({
+      msg: "berhasil Update Education",
     });
   } catch (error) {
     return res.status(404).json({
@@ -357,4 +455,6 @@ module.exports = {
   addSkill,
   addJobInterests,
   addResume,
+  addSosialMedia,
+  addOrganization,
 };
