@@ -265,8 +265,7 @@ const addSkill = async (req, res, next) => {
           $set: {
             skills: [...value],
           },
-        },
-        { upsert: true }
+        }
       );
     }
     return res.status(200).json({
@@ -278,6 +277,77 @@ const addSkill = async (req, res, next) => {
     });
   }
 };
+const addJobInterests = async (req, res, next) => {
+  const { username } = req.user;
+  const { job } = req.body;
+  try {
+    const findAccountPelamar = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findAccountPelamar)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+    if (findAccountPelamar.jobInterest === undefined) {
+      const updateJob = await db.collection("profilepelamar").updateOne(
+        { _id: findAccountPelamar._id },
+        {
+          $set: {
+            jobInterest: job,
+          },
+        }
+      );
+    } else {
+      const ontol = await db
+        .collection("profilepelamar")
+        .find({ _id: findAccountPelamar._id })
+        .project({
+          jobInterest: 1,
+        })
+        .toArray();
+      const value = new Set([...ontol[0].jobInterest, ...job]);
+      await db.collection("profilepelamar").updateOne(
+        { _id: findAccountPelamar._id },
+        {
+          $set: {
+            jobInterest: [...value],
+          },
+        }
+      );
+    }
+    return res.status(200).json({
+      msg: "berhasil Update Job",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+const addResume = async (req, res, next) => {
+  const { username } = req.user;
+  const cv = req.file;
+  try {
+    const findAccountPelamar = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findAccountPelamar)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+    console.log(cv);
+    return res.status(200).json({
+      msg: "berhasil Update Job",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+
 module.exports = {
   getDetailProfil,
   editDetailProfil,
@@ -285,4 +355,6 @@ module.exports = {
   addWorkExperience,
   addEducation,
   addSkill,
+  addJobInterests,
+  addResume,
 };
