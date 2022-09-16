@@ -6,27 +6,34 @@ const db = client.db("hr_cerdas");
 const createLowongan = async (req, res, next) => {
   const {
     position,
-    placementCity_id,
+    districts,
+    sub_district,
+    postal_codes,
     salarymin,
     salarymax,
     tesRequired,
-    mustHaveSkill,
+    skill,
     jobDescription,
     Essay,
   } = req.body;
-  const cariusername = req.user.username;
+  const { username } = req.user;
   try {
     const findIdHr = await db.collection("profilehrs").findOne({
-      username: cariusername,
+      username: username,
     });
     if (!findIdHr)
-      throw {
-        message: "Hanya HR yang Dapat Membuat Lowongan",
+      return res.status(400).json({
         status: "Bad Request",
-        code: 400,
-      };
+        message: "data hr tidak ditemukan",
+      });
 
-    const salary = `${salarymin} - ${salarymax}`;
+    const rupiah = number => {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(number);
+    };
+    const salary = `${rupiah(salarymin)} - ${rupiah(salarymax)}`;
 
     const require = [];
     if (tesRequired === "true") {
@@ -45,10 +52,10 @@ const createLowongan = async (req, res, next) => {
     const createLowongan = await db.collection("lowongan_pekerjaan").insertOne({
       id_hr: findIdHr._id,
       position: position,
-      placementCity: placementCity_id,
+      // placementCity: placementC,
+      skills: skill,
       salary: salary,
       tesrequired: require[0],
-      musthaveskill: mustHaveSkill,
       jobdescription: jobDescription,
       essay: esay[0],
     });
@@ -62,7 +69,21 @@ const createLowongan = async (req, res, next) => {
     });
   }
 };
+const getAllLowongan = async (req, res, next) => {
+  try {
+    const getData = await db.collection("lowongan_pekerjaan").find().toArray();
+
+    return res.status(200).json({
+      data: getData,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: "Bad Request",
+    });
+  }
+};
 
 module.exports = {
   createLowongan,
+  getAllLowongan,
 };

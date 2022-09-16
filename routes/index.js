@@ -19,7 +19,7 @@ const authHeader = require("../misc/auth.header");
 // use Route Start
 router.use("/hr", hr);
 router.use("/pelamar", pelamar);
-router.use("/lowonganpekerjaan", authHeader, lowonganPekerjaan);
+router.use("/lowonganpekerjaan",  lowonganPekerjaan);
 router.use("/postalcode", postalcode);
 router.use("/detailpelamar", authHeader, detailPelamar);
 router.use("/", authHeader, nyoba);
