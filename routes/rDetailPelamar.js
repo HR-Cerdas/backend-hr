@@ -15,7 +15,7 @@ const {
 } = require("../controller/cDetailPelamar");
 
 const validationEditDetailPelamar = require("../validation/vDetailPelamar");
-const uploadCv = require("../misc/multer");
+const uploadCv = require("../misc/multerCV");
 
 // get All Detail Data Pelamar
 router.get("/getalldetail", getDetailProfil);
