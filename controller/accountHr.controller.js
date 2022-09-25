@@ -99,7 +99,6 @@ const login = async (req, res, next) => {
       const token = signToken(payload);
       return res.status(200).json({
         data: token,
-        msg: "dayat untul banget nget nget",
       });
     }
     // Check Password True & login End
