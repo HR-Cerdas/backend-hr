@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  backend_hr:
+    container_name: 'backend_hr'
+    build: .
+    command: yarn start
+    ports:
+      - 3002:3002
+    volumes:
+      - ./:/app/
+      - /app/node_modules
