@@ -10,6 +10,7 @@ COPY yarn*.json ./
 
 RUN chown -R node:node /app/
 
+RUN yarn global add nodemon
 RUN yarn install
 
 COPY . .
