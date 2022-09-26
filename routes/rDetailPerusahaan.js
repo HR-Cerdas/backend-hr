@@ -20,6 +20,7 @@ router.put(
   uploadKtp.fields([
     { name: "ktp", maxCount: 1 },
     { name: "tdp", maxCount: 1 },
+    { name: "siup", maxCount: 1 },
   ]),
   editDetailProfile
 );
