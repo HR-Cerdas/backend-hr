@@ -2,10 +2,6 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 
-var uploadfilektpname = "";
-var uploadfiletdpname = "";
-var uploadfilesiupname = "";
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const { username } = req.user;

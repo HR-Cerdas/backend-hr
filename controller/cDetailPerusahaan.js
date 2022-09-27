@@ -3,6 +3,7 @@ const { MongoClient } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
 const path = require("path");
+const fs = require("fs");
 
 const editDetailBasicInfo = async (req, res, next) => {
   const { username } = req.user;
@@ -49,15 +50,13 @@ const editDetailBasicInfo = async (req, res, next) => {
 const editDetailProfile = async (req, res, next) => {
   const { username } = req.user;
   const { industryCategory, Capacity, DetailDescription } = req.body;
-  const ktp = req.file;
-  const tdp = req.file;
-  const siup = req.file;
+  const ktp = req.files;
+  const tdp = req.files;
+  const siup = req.files;
+  // console.log(ktp);
   // const textKtp = ktp.ktp[0].path + "ktp";
   // const textTdp = tdp.tdp[0].path + "tdp";
   // const textSiup = siup.tdp[0].path + "siup";
-  console.log(ktp[0].path);
-  console.log(tdp[0].path);
-  console.log(siup[0].path);
 
   try {
     const findAccountHr = await db
@@ -69,34 +68,144 @@ const editDetailProfile = async (req, res, next) => {
         message: "data hr tidak ditemukan",
       });
     }
-    // console.log(findAccountHr);
-    // console.log(findAccountHr.DetailProfile.filetdp);
 
-    // var filename = path.basename(`../assets/DetailPerusahaan/${username}/ktp`);
+    // console.log(filenamektp);
 
     const textKtp = [];
     const textTdp = [];
     const textSiup = [];
 
-    if (ktp[0] === undefined) {
-      textKtp.push("");
-    } else {
-      textKtp.push(ktp[0].path);
-    }
-    if (tdp[0] === undefined) {
-      textTdp.push("");
-    } else {
-      textTdp.push(tdp[0].path);
-    }
-    if (siup[0] === undefined) {
-      textSiup.push("");
-    } else {
-      textSiup.push(siup[0].path);
-    }
+    try {
+      const files = fs.readdirSync(`./assets/DetailPerusahaan/${username}`);
+      // console.log("kikikikiki");
 
-    console.log(textKtp);
-    console.log(textTdp);
-    console.log(textSiup);
+      let filenamektp = path.basename(
+        `../${findAccountHr.DetailProfile.filektp}`
+      );
+      let filenametdp = path.basename(
+        `../${findAccountHr.DetailProfile.filetdp}`
+      );
+      let filenamesiup = path.basename(
+        `../${findAccountHr.DetailProfile.filesiup}`
+      );
+
+      if (ktp.ktp === undefined) {
+        if (findAccountHr.DetailProfile.filektp === "") {
+          textKtp.push("");
+        } else {
+          const paths = `./assets/DetailPerusahaan/${username}/ktp/${filenamektp}`;
+          fs.unlink(paths, function (err) {
+            if (err) {
+              throw err;
+            } else {
+              console.log("Successfully deleted the file.");
+            }
+          });
+          textKtp.push(ktp.ktp[0].path);
+        }
+      } else {
+        if (filenamektp === "..") {
+          textKtp.push(ktp.ktp[0].path);
+        } else {
+          let filenamektp = path.basename(
+            `../${findAccountHr.DetailProfile.filektp}`
+          );
+          const paths = `./assets/DetailPerusahaan/${username}/ktp/${filenamektp}`;
+          fs.unlink(paths, function (err) {
+            if (err) {
+              throw err;
+            } else {
+              console.log("Successfully deleted the file.");
+            }
+          });
+          textKtp.push(ktp.ktp[0].path);
+        }
+      }
+
+      if (tdp.tdp === undefined) {
+        if (findAccountHr.DetailProfile.filetdp === "") {
+          textTdp.push("");
+        } else {
+          const paths = `./assets/DetailPerusahaan/${username}/tdp/${filenametdp}`;
+          fs.unlink(paths, function (err) {
+            if (err) {
+              throw err;
+            } else {
+              console.log("Successfully deleted the file.");
+            }
+          });
+          textTdp.push(tdp.tdp[0].path);
+        }
+      } else {
+        if (filenametdp === "..") {
+          textTdp.push(tdp.tdp[0].path);
+        } else {
+          let filenametdp = path.basename(
+            `../${findAccountHr.DetailProfile.filetdp}`
+          );
+          const paths = `./assets/DetailPerusahaan/${username}/tdp/${filenametdp}`;
+          fs.unlink(paths, function (err) {
+            if (err) {
+              throw err;
+            } else {
+              console.log("Successfully deleted the file.");
+            }
+          });
+          textTdp.push(tdp.tdp[0].path);
+        }
+      }
+
+      if (siup.siup === undefined) {
+        if (findAccountHr.DetailProfile.filesiup === "") {
+          textSiup.push("");
+        } else {
+          const paths = `./assets/DetailPerusahaan/${username}/siup/${filenamesiup}`;
+          fs.unlink(paths, function (err) {
+            if (err) {
+              throw err;
+            } else {
+              console.log("Successfully deleted the file.");
+            }
+          });
+          textSiup.push(siup.siup[0].path);
+        }
+      } else {
+        if (filenamesiup === "..") {
+          textSiup.push(siup.siup[0].path);
+        } else {
+          let filenamesiup = path.basename(
+            `../${findAccountHr.DetailProfile.filesiup}`
+          );
+          const paths = `./assets/DetailPerusahaan/${username}/siup/${filenamesiup}`;
+          fs.unlink(paths, function (err) {
+            if (err) {
+              throw err;
+            } else {
+              console.log("Successfully deleted the file.");
+            }
+          });
+          textSiup.push(siup.siup[0].path);
+        }
+      }
+    } catch (error) {
+      // console.log("asdasd");
+
+      if (ktp.ktp === undefined) {
+        textKtp.push("");
+      } else {
+        textKtp.push(ktp.ktp[0].path);
+      }
+      if (tdp.tdp === undefined) {
+        textTdp.push("");
+      } else {
+        textTdp.push(tdp.tdp[0].path);
+      }
+      if (siup.siup === undefined) {
+        textSiup.push("");
+      } else {
+        textSiup.push(siup.siup[0].path);
+      }
+    }
 
     const editPorfileDetail = await db.collection("profilehrs").updateOne(
       { _id: findAccountHr._id },

@@ -1,6 +1,6 @@
-const opsion = true;
-if (opsion === true) {
-  console.log("kokoko");
-} else {
-  console.log("llplppl");
+var fs = require("fs");
+try {
+  var files = fs.readdirSync("./assets/DetailPerusahaan/rajih");
+} catch (error) {
+  console.log("kontol");
 }
