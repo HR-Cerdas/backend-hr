@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   createLowongan,
   getAllLowongan,
+  getDetailLowongan,
 } = require("../controller/lowonganPekerjaan.controller");
 // Get Route End
 
@@ -12,5 +13,6 @@ const authHeader = require("../misc/auth.header");
 // Create Lowongan pekerjaan
 router.post("/create", authHeader, createLowongan);
 router.get("/getall", getAllLowongan);
+router.get("/detaillowongan/id/:id", getDetailLowongan);
 
 module.exports = router;

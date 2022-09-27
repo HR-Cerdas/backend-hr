@@ -1,14 +1,12 @@
 require("dotenv").config();
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
 
 const createLowongan = async (req, res, next) => {
   const {
     position,
-    districts,
-    sub_district,
-    postal_codes,
+    placementCity,
     salarymin,
     salarymax,
     tesRequired,
@@ -52,7 +50,7 @@ const createLowongan = async (req, res, next) => {
     const createLowongan = await db.collection("lowongan_pekerjaan").insertOne({
       id_hr: findIdHr._id,
       position: position,
-      // placementCity: placementC,
+      placementCity: placementCity,
       skills: skill,
       salary: salary,
       tesrequired: require[0],
@@ -69,6 +67,33 @@ const createLowongan = async (req, res, next) => {
     });
   }
 };
+
+const getDetailLowongan = async (req, res, next) => {
+  const id = req.params.id;
+  console.log(id);
+
+  try {
+    const findIdLowongan = await db.collection("lowongan_pekerjaan").findOne({
+      _id: ObjectId(id),
+    });
+    console.log(findIdLowongan);
+    if (!findIdLowongan)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "lowongan tidak di temukan",
+      });
+
+    return res.status(200).json({
+      data: findIdLowongan,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Requestss",
+      message: error,
+    });
+  }
+};
+
 const getAllLowongan = async (req, res, next) => {
   try {
     const getData = await db.collection("lowongan_pekerjaan").find().toArray();
@@ -86,4 +111,5 @@ const getAllLowongan = async (req, res, next) => {
 module.exports = {
   createLowongan,
   getAllLowongan,
+  getDetailLowongan,
 };
