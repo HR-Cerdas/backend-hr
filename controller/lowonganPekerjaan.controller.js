@@ -13,6 +13,8 @@ const createLowongan = async (req, res, next) => {
     skill,
     jobDescription,
     Essay,
+    startdate,
+    enddate,
   } = req.body;
   const { username } = req.user;
   try {
@@ -47,6 +49,14 @@ const createLowongan = async (req, res, next) => {
       esay.push("false");
     }
 
+    const profileImage = [];
+
+    if (findIdHr.DetailBasicPerusahaan === undefined) {
+      profileImage.push("");
+    } else {
+      profileImage.push(findIdHr.DetailBasicPerusahaan.fotoperusahaan);
+    }
+
     const createLowongan = await db.collection("lowongan_pekerjaan").insertOne({
       id_hr: findIdHr._id,
       position: position,
@@ -56,6 +66,11 @@ const createLowongan = async (req, res, next) => {
       tesrequired: require[0],
       jobdescription: jobDescription,
       essay: esay[0],
+      profileImage: profileImage[0],
+      start_date: startdate,
+      end_date: enddate,
+      created_at: new Date(),
+      updated_ad: new Date(),
     });
     return res.status(200).json({
       message: "Berhasil Create Lowongan",
@@ -70,7 +85,6 @@ const createLowongan = async (req, res, next) => {
 
 const getDetailLowongan = async (req, res, next) => {
   const id = req.params.id;
-  console.log(id);
 
   try {
     const findIdLowongan = await db.collection("lowongan_pekerjaan").findOne({
@@ -107,6 +121,30 @@ const getAllLowongan = async (req, res, next) => {
     });
   }
 };
+
+// const applyLowongan = async (req, res, next) => {
+//   const { username } = req.user;
+//   const id = req.params.id;
+//   try {
+//     const findIdHr = await db.collection("profilehrs").findOne({
+//       username: username,
+//     });
+//     if (!findIdHr)
+//       return res.status(400).json({
+//         status: "Bad Request",
+//         message: "data hr tidak ditemukan",
+//       });
+
+//     const findLowongan = await db.collection("lowongan_pekerjaan").findOne({
+//       _id: ObjectId(id),
+//     });
+//     if (!findLowongan)
+//       return res.status(400).json({
+//         status: "Bad Request",
+//         message: "lowongan tidak di temukan",
+//       });
+//   } catch (error) {}
+// };
 
 module.exports = {
   createLowongan,

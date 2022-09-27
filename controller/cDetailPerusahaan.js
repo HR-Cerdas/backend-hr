@@ -1,12 +1,12 @@
 require("dotenv").config();
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
 const path = require("path");
 const fs = require("fs");
 
 const editDetailBasicInfo = async (req, res, next) => {
-  const { username } = req.user;
+  const { username, id } = req.user;
   const { namaperusahaan, alamat, noPerusahaan, email, website, deskripsi } =
     req.body;
   const fotoProfilPerusahaan = req.file;
@@ -20,6 +20,29 @@ const editDetailBasicInfo = async (req, res, next) => {
         message: "data hr tidak ditemukan",
       });
     }
+
+    const profil = [];
+    const findlowonganHr = await db.collection("lowongan_pekerjaan").findOne({
+      id_hr: ObjectId(id),
+    });
+
+    if (fotoProfilPerusahaan === undefined) {
+      profil.push("");
+    } else {
+      if (findlowonganHr === null) {
+        profil.push(fotoProfilPerusahaan.path);
+      } else {
+        await db.collection("lowongan_pekerjaan").updateOne(
+          { id_hr: findlowonganHr.id_hr },
+          {
+            $set: {
+              profileImage: fotoProfilPerusahaan.path,
+            },
+          }
+        );
+      }
+    }
+
     const editBasicDetail = await db.collection("profilehrs").updateOne(
       { _id: findAccountHr._id },
       {
@@ -30,7 +53,7 @@ const editDetailBasicInfo = async (req, res, next) => {
             noPerusahaan: noPerusahaan,
             email: email,
             website: website,
-            fotoperusahaan: fotoProfilPerusahaan.path,
+            fotoperusahaan: profil[0],
             deskripsi: deskripsi,
           },
         },
