@@ -6,6 +6,7 @@ const {
   getAllLowongan,
   getDetailLowongan,
   applyLowongan,
+  getAllDataPelamarApply,
 } = require("../controller/lowonganPekerjaan.controller");
 // Get Route End
 
@@ -22,5 +23,6 @@ router.put(
   uploadCv.single("resume"),
   applyLowongan
 );
+router.get("/listpelamar/id/:id", authHeader, getAllDataPelamarApply);
 
 module.exports = router;
