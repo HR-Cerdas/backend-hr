@@ -7,6 +7,7 @@ const {
   getDetailLowongan,
   applyLowongan,
   getAllDataPelamarApply,
+  getLowonganhr,
 } = require("../controller/lowonganPekerjaan.controller");
 // Get Route End
 
@@ -24,5 +25,6 @@ router.put(
   applyLowongan
 );
 router.get("/listpelamar/id/:id", authHeader, getAllDataPelamarApply);
+router.get("/getlowonganhr", authHeader, getLowonganhr);
 
 module.exports = router;

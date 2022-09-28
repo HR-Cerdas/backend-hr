@@ -246,15 +246,39 @@ const getAllDataPelamarApply = async (req, res, next) => {
   }
 };
 
-// const getLowonganhr = async (req, res, next) => {
-//   const { username } = req.user;
-//   try {
-//   } catch (error) {}
-// };
+const getLowonganhr = async (req, res, next) => {
+  const { id } = req.user;
+  console.log(id);
+
+  try {
+    const findIdhr = await db.collection("profilehrs").findOne({
+      _id: ObjectId(id),
+    });
+    if (!findIdhr)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data hr tidak ditemukan",
+      });
+    const findLowonganByHr = await db
+      .collection("lowongan_pekerjaan")
+      .find({ id_hr: ObjectId(id) })
+      .toArray();
+
+    return res.status(200).json({
+      data: findLowonganByHr,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+
 module.exports = {
   createLowongan,
   getAllLowongan,
   getDetailLowongan,
   applyLowongan,
   getAllDataPelamarApply,
+  getLowonganhr,
 };
