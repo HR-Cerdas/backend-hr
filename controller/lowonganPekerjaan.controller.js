@@ -122,32 +122,69 @@ const getAllLowongan = async (req, res, next) => {
   }
 };
 
-// const applyLowongan = async (req, res, next) => {
-//   const { username } = req.user;
-//   const id = req.params.id;
-//   try {
-//     const findIdHr = await db.collection("profilehrs").findOne({
-//       username: username,
-//     });
-//     if (!findIdHr)
-//       return res.status(400).json({
-//         status: "Bad Request",
-//         message: "data hr tidak ditemukan",
-//       });
+const applyLowongan = async (req, res, next) => {
+  const { username } = req.user;
+  const { nomer, alasan } = req.body;
+  const resume = req.file;
 
-//     const findLowongan = await db.collection("lowongan_pekerjaan").findOne({
-//       _id: ObjectId(id),
-//     });
-//     if (!findLowongan)
-//       return res.status(400).json({
-//         status: "Bad Request",
-//         message: "lowongan tidak di temukan",
-//       });
-//   } catch (error) {}
-// };
+  const id = req.params.id;
+  try {
+    const findIdPelamar = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findIdPelamar)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+
+    const findLowongan = await db.collection("lowongan_pekerjaan").findOne({
+      _id: ObjectId(id),
+    });
+    if (!findLowongan)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "lowongan tidak di temukan",
+      });
+
+    const findPerusahaan = await db.collection("profilehrs").findOne({
+      _id: ObjectId(findLowongan.id_hr),
+    });
+    if (!findLowongan)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data hr tidak di temukan",
+      });
+
+    const addPelamar = await db.collection("lowongan_pekerjaan").updateOne(
+      { _id: ObjectId(findLowongan._id) },
+      {
+        $set: {
+          Pelamar: [
+            {
+              id_pelamar: findIdPelamar._id,
+              nomer: nomer,
+              alasan: alasan,
+              resume: resume.path,
+            },
+          ],
+        },
+      }
+    );
+
+    return res.status(200).json({
+      msg: `berhasil melamar di ${findPerusahaan.DetailBasicPerusahaan.namaperusahaan}`,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: "Bad Request",
+    });
+  }
+};
 
 module.exports = {
   createLowongan,
   getAllLowongan,
   getDetailLowongan,
+  applyLowongan,
 };

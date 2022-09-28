@@ -1,9 +1,12 @@
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
 
 const storageCv = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./assets/cv");
+    const path = `./assets/cv/${req.user.username}`;
+    fs.mkdirSync(path, { recursive: true });
+    return cb(null, path);
   },
   filename: function (req, file, cb) {
     cb(
