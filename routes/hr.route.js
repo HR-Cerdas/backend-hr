@@ -1,12 +1,12 @@
 const express = require("express");
 // Get Module Controller Start
 const {
-  nyoba,
   register,
   login,
   forgotPassword,
   resetPassword,
   getToken,
+  getprofilid,
 } = require("../controller/accountHr.controller");
 const router = express.Router();
 // Get Module Controller End
@@ -18,6 +18,7 @@ const forgotPasswordValidation = require("../validation/forgotPassword.validatio
 const resetPasswordValidation = require("../validation/resetPassword.validation");
 // Validation End
 const regisSanitize = require("../sanitize/register.sanitize");
+const authHeader = require("../misc/auth.header");
 
 // Register Hr
 router.post("/register", regisValidation, regisSanitize, register);
@@ -29,6 +30,6 @@ router.put("/gantiPassword", forgotPasswordValidation, forgotPassword);
 router.put("/resetPassword", resetPasswordValidation, resetPassword);
 // Percobaan
 router.get("/getToken", getToken);
-// router.get("/nyoba", nyoba);
+router.get("/profile", authHeader, getprofilid);
 
 module.exports = router;

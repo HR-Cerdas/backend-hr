@@ -223,28 +223,26 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
-// const getprofilid = async (req, res) => {
-//   const { username } = req.user;
-//   try {
-//     const findhr = await db.collection("profilehrs").findOne({
-//       username: username,
-//     });
-//     if (!findhr)
-//       throw {
-//         message: "data Hr Tidak Terdaftar",
-//         status: "Bad Request",
-//         code: 400,
-//       };
+const getprofilid = async (req, res) => {
+  const { username } = req.user;
+  try {
+    const findhr = await db.collection("profilehrs").findOne({
+      username: username,
+    });
+    if (!findhr)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data hr tidak ditemukan",
+      });
 
-
-//     res.status(200).json({ msg: get });
-//   } catch (error) {
-//     res.status(404).json({ msg: "Not Found" });
-//   }
-// };
+    res.status(200).json({ data: findhr });
+  } catch (error) {
+    res.status(404).json({ msg: "Not Found" });
+  }
+};
 
 module.exports = {
-  // getprofilid,
+  getprofilid,
   register,
   login,
   forgotPassword,

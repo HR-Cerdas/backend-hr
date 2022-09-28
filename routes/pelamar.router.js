@@ -6,6 +6,7 @@ const {
   forgotPassword,
   resetPassword,
   getToken,
+  getprofilid,
 } = require("../controller/accountPelamar.controller");
 const router = express.Router();
 // Get Module Controller End
@@ -17,6 +18,7 @@ const forgotPasswordValidation = require("../validation/forgotPassword.validatio
 const resetPasswordValidation = require("../validation/resetPassword.validation");
 // Validation End
 const regisSanitize = require("../sanitize/register.sanitize");
+const authHeader = require("../misc/auth.header");
 
 // Register Pelamar
 router.post("/register", regisValidation, regisSanitize, register);
@@ -28,5 +30,6 @@ router.put("/gantiPassword", forgotPasswordValidation, forgotPassword);
 router.put("/resetPassword", resetPasswordValidation, resetPassword);
 // Percobaan
 router.get("/getToken", getToken);
+router.get("/profile", authHeader, getprofilid);
 
 module.exports = router;

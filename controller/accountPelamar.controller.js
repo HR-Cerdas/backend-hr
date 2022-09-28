@@ -227,10 +227,29 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
+const getprofilid = async (req, res) => {
+  const { username } = req.user;
+  try {
+    const findhr = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findhr)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+
+    res.status(200).json({ data: findhr });
+  } catch (error) {
+    res.status(404).json({ msg: "Not Found" });
+  }
+};
+
 module.exports = {
   register,
   login,
   forgotPassword,
   resetPassword,
   getToken,
+  getprofilid,
 };
