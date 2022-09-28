@@ -156,21 +156,41 @@ const applyLowongan = async (req, res, next) => {
         message: "data hr tidak di temukan",
       });
 
-    const addPelamar = await db.collection("lowongan_pekerjaan").updateOne(
-      { _id: ObjectId(findLowongan._id) },
-      {
-        $set: {
-          Pelamar: [
-            {
-              id_pelamar: findIdPelamar._id,
-              nomer: nomer,
-              alasan: alasan,
-              resume: resume.path,
+    if (findLowongan.Pelamar === undefined) {
+      await db.collection("lowongan_pekerjaan").updateOne(
+        { _id: ObjectId(findLowongan._id) },
+        {
+          $set: {
+            Pelamar: [
+              {
+                id_pelamar: findIdPelamar._id,
+                nomer: nomer,
+                alasan: alasan,
+                resume: resume.path,
+              },
+            ],
+          },
+        }
+      );
+    } else {
+      await db.collection("lowongan_pekerjaan").updateOne(
+        { _id: ObjectId(findLowongan._id) },
+        {
+          $push: {
+            Pelamar: {
+              $each: [
+                {
+                  id_pelamar: findIdPelamar._id,
+                  nomer: nomer,
+                  alasan: alasan,
+                  resume: resume.path,
+                },
+              ],
             },
-          ],
-        },
-      }
-    );
+          },
+        }
+      );
+    }
 
     return res.status(200).json({
       msg: `berhasil melamar di ${findPerusahaan.DetailBasicPerusahaan.namaperusahaan}`,

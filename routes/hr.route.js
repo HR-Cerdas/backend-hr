@@ -29,6 +29,6 @@ router.put("/gantiPassword", forgotPasswordValidation, forgotPassword);
 router.put("/resetPassword", resetPasswordValidation, resetPassword);
 // Percobaan
 router.get("/getToken", getToken);
-router.get("/nyoba", nyoba);
+// router.get("/nyoba", nyoba);
 
 module.exports = router;
