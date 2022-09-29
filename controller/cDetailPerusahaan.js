@@ -30,18 +30,20 @@ const editDetailBasicInfo = async (req, res, next) => {
       profil.push("");
     } else {
       if (findlowonganHr === null) {
-        profil.push(fotoProfilPerusahaan.path);
+        profil.push(fotoProfilPerusahaan.filename);
       } else {
+        profil.push(fotoProfilPerusahaan.filename);
         await db.collection("lowongan_pekerjaan").updateOne(
           { id_hr: findlowonganHr.id_hr },
           {
             $set: {
-              profileImage: fotoProfilPerusahaan.path,
+              profileImage: fotoProfilPerusahaan.filename,
             },
           }
         );
       }
     }
+    console.log(profil);
 
     const editBasicDetail = await db.collection("profilehrs").updateOne(
       { _id: findAccountHr._id },
