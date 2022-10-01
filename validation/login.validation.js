@@ -6,14 +6,14 @@ module.exports = (req, res, next) => {
   // Validation form Email Tidak Boleh Kosong
   if (!email)
     return response.Fail(
-      response.BadRequest,
+      response.Unauthorized,
       "Bad Request",
       "email tidak boleh kosong"
     );
   // Validation form Password Tidak Boleh Kosong
   if (!password)
     return response.Fail(
-      response.BadRequest,
+      response.Unauthorized,
       "Bad Request",
       "password tidak boleh kosong"
     );
@@ -23,7 +23,7 @@ module.exports = (req, res, next) => {
   const isValidEmail = email.match(validEmail);
   if (!isValidEmail)
     return response.Fail(
-      response.BadRequest,
+      response.Unauthorized,
       "Bad Request",
       "email tidak valid"
     );
@@ -32,7 +32,7 @@ module.exports = (req, res, next) => {
   const isValidPassword = password.match(validPassword);
   if (!isValidPassword)
     return response.Fail(
-      response.BadRequest,
+      response.Unauthorized,
       "Bad Request",
       "Kata sandi harus memiliki setidaknya satu Karakter Huruf Besar."
     );
@@ -41,7 +41,7 @@ module.exports = (req, res, next) => {
   const isContainsLowercase = password.match(containsLowercase);
   if (!isContainsLowercase) {
     return response.Fail(
-      response.BadRequest,
+      response.Unauthorized,
       "Bad Request",
       "Kata sandi harus memiliki setidaknya satu Karakter Huruf Kecil."
     );
@@ -50,7 +50,7 @@ module.exports = (req, res, next) => {
   const isContainsSymbol = password.match(containsSymbol);
   if (!isContainsSymbol) {
     return response.Fail(
-      response.BadRequest,
+      response.Unauthorized,
       "Bad Request",
       "Kata sandi harus mengandung setidaknya satu Simbol Khusus."
     );
@@ -59,7 +59,7 @@ module.exports = (req, res, next) => {
   const isContainsNumber = password.match(containsNumber);
   if (!password.match(isContainsNumber)) {
     return response.Fail(
-      response.BadRequest,
+      response.Unauthorized,
       "Bad Request",
       "Kata sandi harus mengandung setidaknya satu digit Angka."
     );
@@ -68,7 +68,7 @@ module.exports = (req, res, next) => {
   const isValidLength = password.match(validLength);
   if (!password.match(isValidLength)) {
     return response.Fail(
-      response.BadRequest,
+      response.Unauthorized,
       "Bad Request",
       "Kata sandi harus terdiri dari 8-15 Karakter."
     );
@@ -76,7 +76,7 @@ module.exports = (req, res, next) => {
   const hasSpace = !password.match(/^\S*$/) && !confirmPassword.match(/^\S*$/);
   if (hasSpace)
     return response.Fail(
-      response.BadRequest,
+      response.Unauthorized,
       "Bad Request",
       "password tidak boleh mengandung spasi"
     );

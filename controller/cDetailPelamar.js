@@ -116,7 +116,6 @@ const updateAbout = async (req, res, next) => {
 const addWorkExperience = async (req, res, next) => {
   const { username } = req.user;
   const { jobPosition, company, startDate, endDate } = req.body;
-
   try {
     const findAccountPelamar = await db.collection("profilepelamar").findOne({
       username: username,
@@ -127,7 +126,7 @@ const addWorkExperience = async (req, res, next) => {
         message: "data pelamar tidak ditemukan",
       });
     if (findAccountPelamar.workExperience === undefined) {
-      const updateExperience = await db.collection("profilepelamar").updateOne(
+      await db.collection("profilepelamar").updateOne(
         { _id: findAccountPelamar._id },
         {
           $set: {

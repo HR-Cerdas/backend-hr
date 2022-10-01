@@ -102,6 +102,7 @@ const login = async (req, res, next) => {
       const token = signToken(payload);
       return res.status(200).json({
         data: token,
+        email: email,
       });
     }
     // Check Password True & login End
@@ -228,10 +229,10 @@ const resetPassword = async (req, res, next) => {
 };
 
 const getprofilid = async (req, res) => {
-  const { username } = req.user;
+  const { email } = req.body;
   try {
     const findhr = await db.collection("profilepelamar").findOne({
-      username: username,
+      email: email,
     });
     if (!findhr)
       return res.status(400).json({
