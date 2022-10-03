@@ -229,10 +229,10 @@ const resetPassword = async (req, res, next) => {
 };
 
 const getprofilid = async (req, res) => {
-  const { email } = req.body;
+  const { username } = req.user;
   try {
     const findhr = await db.collection("profilepelamar").findOne({
-      email: email,
+      username: username,
     });
     if (!findhr)
       return res.status(400).json({
