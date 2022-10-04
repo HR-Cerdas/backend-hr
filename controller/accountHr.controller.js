@@ -24,11 +24,10 @@ const register = async (req, res, next) => {
       .collection("profilehrs")
       .findOne({ email: email });
     if (findEmail)
-      throw {
-        message: "Email telah digunakan",
+      return res.status(400).json({
         status: "Bad Request",
-        code: 400,
-      };
+        message: "Email Salah",
+      });
     // Check Email Ready End
 
     // Check Email Ready Start
@@ -36,11 +35,10 @@ const register = async (req, res, next) => {
       .collection("profilehrs")
       .findOne({ username: username });
     if (findUsername)
-      throw {
-        message: "Username telah digunakan",
+      return res.status(400).json({
         status: "Bad Request",
-        code: 400,
-      };
+        message: "Email Salah",
+      });
     // Check Email Ready End
 
     // Check Password Confirm Start
