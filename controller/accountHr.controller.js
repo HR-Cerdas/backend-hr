@@ -84,6 +84,7 @@ const login = async (req, res, next) => {
     const findEmail = await db.collection("profilehrs").findOne({
       email: email,
     });
+    // error
     if (!findEmail)
       return res.status(400).json({
         status: "Bad Request",
