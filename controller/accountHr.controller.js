@@ -26,7 +26,7 @@ const register = async (req, res, next) => {
     if (findEmail)
       return res.status(400).json({
         status: "Bad Request",
-        message: "Email Salah",
+        message: "Email Telah digunakan",
       });
     // Check Email Ready End
 
@@ -37,7 +37,7 @@ const register = async (req, res, next) => {
     if (findUsername)
       return res.status(400).json({
         status: "Bad Request",
-        message: "Email Salah",
+        message: "Username telah digunakan",
       });
     // Check Email Ready End
 
