@@ -132,7 +132,7 @@ const addWorkExperience = async (req, res, next) => {
           $set: {
             workExperience: [
               {
-                jobosition: jobPosition,
+                jobposition: jobPosition,
                 company: company,
                 startDate: moment.utc(startDate),
                 endDate: moment.utc(endDate),
