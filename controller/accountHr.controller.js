@@ -2,7 +2,7 @@
 require("dotenv").config();
 // Menggunakan .env End
 const bcrypt = require("bcryptjs");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
 const { kirimEmail } = require("../helpers/email");
@@ -225,10 +225,11 @@ const resetPassword = async (req, res, next) => {
 };
 
 const getprofilid = async (req, res) => {
-  const { username } = req.user;
+  const { id } = req.user;
+  console.log(id);
   try {
     const findhr = await db.collection("profilehrs").findOne({
-      username: username,
+      _id: ObjectId(id),
     });
     if (!findhr)
       return res.status(400).json({

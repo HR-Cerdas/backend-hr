@@ -21,7 +21,7 @@ const uploadCv = require("../misc/multerCV");
 router.get("/getalldetail", getDetailProfil);
 // Edit Detail Data Pelamar
 router.put("/editdetailpelamar", validationEditDetailPelamar, editDetailProfil);
-router.get("/getAbout", updateAbout);
+router.put("/getAbout", updateAbout);
 router.put("/addexperience", addWorkExperience);
 router.put("/addeducation", addEducation);
 router.put("/addskill", addSkill);
