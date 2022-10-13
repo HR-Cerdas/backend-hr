@@ -2,8 +2,7 @@ const Response = require("../helpers/response");
 
 module.exports = (req, res, next) => {
   const response = new Response(res);
-  const { location, age, residentialStatus, nationality, noHp, email } =
-    req.body;
+  const { location, residentialStatus, nationality, noHp, email } = req.body;
 
   if (!noHp)
     return response.Fail(
@@ -43,14 +42,6 @@ module.exports = (req, res, next) => {
       response.BadRequest,
       "Bad Request",
       "Residen hanya boleh mengandung alphabet"
-    );
-  const validAge = /^[0-9]+$/;
-  const isValidAge = age.match(validAge);
-  if (!isValidAge)
-    return response.Fail(
-      response.BadRequest,
-      "Bad Request",
-      "Age hanya boleh mengandung angka"
     );
   const validnoHp = /^[0-9]+$/;
   const isValidnoHp = noHp.match(validnoHp);

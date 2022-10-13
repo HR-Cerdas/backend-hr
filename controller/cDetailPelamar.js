@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
 
@@ -32,7 +32,7 @@ const getDetailProfil = async (req, res, next) => {
 // Edit Detail Profil Pelamar
 const editDetailProfil = async (req, res, next) => {
   // Ambil Data Req
-  const { username } = req.user;
+  const { id } = req.user;
   const {
     location,
     tanggalLahir,
@@ -45,7 +45,7 @@ const editDetailProfil = async (req, res, next) => {
   try {
     // Cari Document Account sesuai Login Start
     const findAccountPelamar = await db.collection("profilepelamar").findOne({
-      username: username,
+      _id: ObjectId(id),
     });
     if (!findAccountPelamar)
       return res.status(400).json({
@@ -65,14 +65,14 @@ const editDetailProfil = async (req, res, next) => {
 
     // Edit Data pada 1 Document Start
     const updateDetailPelamar = await db.collection("profilepelamar").updateOne(
-      { _id: findAccountPelamar._id },
+      { _id: ObjectId(id) },
       {
         $set: {
           email: email,
           noHp: noHp,
           DetailProfil: {
             location: location,
-            thlLahir: tanggalLahir,
+            tanggalLahir: moment.utc(tanggalLahir),
             gender: genderr[0],
             residentialStatus: residentialStatus,
             nationality: nationality,
@@ -81,12 +81,13 @@ const editDetailProfil = async (req, res, next) => {
       }
     );
     // Edit Data pada 1 Document End
-
     return res.status(200).json({
       msg: "berhasil mengubah data",
     });
   } catch (error) {
-    next(error);
+    return res.status(404).json({
+      status: "Bad Request",
+    });
   }
 };
 // Get AboutMe Sesuai User Login
