@@ -274,6 +274,31 @@ const getLowonganhr = async (req, res, next) => {
   }
 };
 
+const deleteLowongan = async (req, res, next) => {
+  const { id } = req.user;
+  const idlowongan = req.params.id;
+  try {
+    const findIdhr = await db.collection("profilehrs").findOne({
+      _id: ObjectId(id),
+    });
+    if (!findIdhr)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data hr tidak ditemukan",
+      });
+    await db
+      .collection("lowongan_pekerjaan")
+      .deleteOne({ _id: ObjectId(idlowongan) });
+    return res.status(200).json({
+      msg: "berhasil menghapus lowongan pekerjaan",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+
 module.exports = {
   createLowongan,
   getAllLowongan,
@@ -281,4 +306,5 @@ module.exports = {
   applyLowongan,
   getAllDataPelamarApply,
   getLowonganhr,
+  deleteLowongan,
 };

@@ -33,8 +33,15 @@ const getDetailProfil = async (req, res, next) => {
 const editDetailProfil = async (req, res, next) => {
   // Ambil Data Req
   const { username } = req.user;
-  const { location, age, gender, residentialStatus, nationality, noHp, email } =
-    req.body;
+  const {
+    location,
+    tanggalLahir,
+    gender,
+    residentialStatus,
+    nationality,
+    noHp,
+    email,
+  } = req.body;
   try {
     // Cari Document Account sesuai Login Start
     const findAccountPelamar = await db.collection("profilepelamar").findOne({
@@ -65,7 +72,7 @@ const editDetailProfil = async (req, res, next) => {
           noHp: noHp,
           DetailProfil: {
             location: location,
-            age: age,
+            thlLahir: tanggalLahir,
             gender: genderr[0],
             residentialStatus: residentialStatus,
             nationality: nationality,
