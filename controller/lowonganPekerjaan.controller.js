@@ -16,10 +16,10 @@ const createLowongan = async (req, res, next) => {
     startdate,
     enddate,
   } = req.body;
-  const { username } = req.user;
+  const { id} = req.user;
   try {
     const findIdHr = await db.collection("profilehrs").findOne({
-      username: username,
+      _id: ObjectId(id),
     });
     if (!findIdHr)
       return res.status(400).json({
@@ -59,6 +59,7 @@ const createLowongan = async (req, res, next) => {
 
     const createLowongan = await db.collection("lowongan_pekerjaan").insertOne({
       id_hr: findIdHr._id,
+      namaPerusahaan: findIdHr.namaPerusahaan,
       position: position,
       placementCity: placementCity,
       skills: skill,

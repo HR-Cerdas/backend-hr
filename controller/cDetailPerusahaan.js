@@ -7,7 +7,7 @@ const fs = require("fs");
 
 const editDetailBasicInfo = async (req, res, next) => {
   const { username, id } = req.user;
-  const { namaperusahaan, alamat, noPerusahaan, email, website, deskripsi } =
+  const {alamat, noPerusahaan, email, website, deskripsi } =
     req.body;
   const fotoProfilPerusahaan = req.file;
   try {
@@ -50,7 +50,6 @@ const editDetailBasicInfo = async (req, res, next) => {
       {
         $set: {
           DetailBasicPerusahaan: {
-            namaperusahaan: namaperusahaan,
             alamat: alamat,
             noPerusahaan: noPerusahaan,
             email: email,

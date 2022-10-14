@@ -10,6 +10,7 @@ const { signToken, checkPassword, tokenCheck } = require("../misc/auth");
 
 const register = async (req, res, next) => {
   const {
+    namaPerusahaan,
     first_name,
     last_name,
     email,
@@ -61,6 +62,7 @@ const register = async (req, res, next) => {
         first_name: first_name,
         last_name: last_name,
       },
+      namaPerusahaan:namaPerusahaan,
       username: username,
       password: hashPassword,
       email: email,
