@@ -16,7 +16,7 @@ const createLowongan = async (req, res, next) => {
     startdate,
     enddate,
   } = req.body;
-  const { id} = req.user;
+  const { id } = req.user;
   try {
     const findIdHr = await db.collection("profilehrs").findOne({
       _id: ObjectId(id),
@@ -157,6 +157,12 @@ const applyLowongan = async (req, res, next) => {
         message: "data hr tidak di temukan",
       });
 
+    const alasannya = [];
+    if (findLowongan.essay === "true") {
+      alasannya.push(alasan);
+    } else {
+      alasannya.push("");
+    }
     if (findLowongan.Pelamar === undefined) {
       await db.collection("lowongan_pekerjaan").updateOne(
         { _id: ObjectId(findLowongan._id) },
@@ -166,7 +172,7 @@ const applyLowongan = async (req, res, next) => {
               {
                 id_pelamar: findIdPelamar._id,
                 nomer: nomer,
-                alasan: alasan,
+                alasan: alasannya,
                 resume: resume.path,
               },
             ],
