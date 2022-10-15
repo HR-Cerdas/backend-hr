@@ -365,7 +365,7 @@ const addResume = async (req, res, next) => {
       { _id: findAccountPelamar._id },
       {
         $set: {
-          fileCV: cv.path,
+          fileCV: cv.filename,
         },
       }
     );
