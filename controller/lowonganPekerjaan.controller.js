@@ -1,7 +1,9 @@
 require("dotenv").config();
-const { MongoClient, ObjectId } = require("mongodb");
+const { MongoClient, ObjectId, Db } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
+const path = require("path");
+const fs = require("fs");
 
 const createLowongan = async (req, res, next) => {
   const {
@@ -129,6 +131,7 @@ const applyLowongan = async (req, res, next) => {
   const resume = req.file;
 
   const id = req.params.id;
+
   try {
     const findIdPelamar = await db.collection("profilepelamar").findOne({
       username: username,
@@ -157,12 +160,56 @@ const applyLowongan = async (req, res, next) => {
         message: "data hr tidak di temukan",
       });
 
-    const alasannya = [];
-    if (findLowongan.essay === "true") {
-      alasannya.push(alasan);
+    const cekResumeNama = [];
+    const cekResumePath = [];
+
+    if (findIdPelamar.pathCV === undefined) {
+      if (resume === undefined) {
+        return res.status(400).json({
+          status: "Bad Request",
+          message: "Harus Menambahkan CV",
+        });
+      } else {
+        await db.collection("profilepelamar").updateOne(
+          { _id: ObjectId(findIdPelamar._id) },
+          {
+            $set: {
+              namaCV: resume.filename,
+              pathCV: resume.path,
+            },
+          }
+        );
+      }
     } else {
-      alasannya.push("");
+      let filenameCv = path.basename(`../${findIdPelamar.pathCV}`);
+      if (resume.filename === filenameCv) {
+        cekResumePath.push(findIdPelamar.pathCV);
+        cekResumeNama.push(filenameCv);
+      } else {
+        const paths = `./assets/cv/${username}/${findIdPelamar.namaCV}`;
+        fs.unlink(paths, function (err) {
+          if (err) {
+            throw err;
+          } else {
+            console.log("Successfully deleted the file.");
+          }
+        });
+
+        await db.collection("profilepelamar").updateOne(
+          { _id: ObjectId(findIdPelamar._id) },
+          {
+            $set: {
+              namaCV: resume.filename,
+              pathCV: resume.path,
+            },
+          }
+        );
+
+        cekResumeNama.push(resume.filename);
+        cekResumePath.push(resume.path);
+      }
     }
+
     if (findLowongan.Pelamar === undefined) {
       await db.collection("lowongan_pekerjaan").updateOne(
         { _id: ObjectId(findLowongan._id) },
@@ -172,13 +219,17 @@ const applyLowongan = async (req, res, next) => {
               {
                 id_pelamar: findIdPelamar._id,
                 nomer: nomer,
-                alasan: alasannya,
-                resume: resume.path,
+                alasan: alasan,
+                namaResume: cekResumeNama[0],
+                pathResume: cekResumePath[0],
               },
             ],
           },
         }
       );
+      return res.status(200).json({
+        msg: `berhasil melamar di`,
+      });
     } else {
       await db.collection("lowongan_pekerjaan").updateOne(
         { _id: ObjectId(findLowongan._id) },
@@ -190,20 +241,20 @@ const applyLowongan = async (req, res, next) => {
                   id_pelamar: findIdPelamar._id,
                   nomer: nomer,
                   alasan: alasan,
-                  resume: resume.path,
+                  namaResume: cekResumeNama[0],
+                  pathResume: cekResumePath[0],
                 },
               ],
             },
           },
         }
       );
+      return res.status(200).json({
+        msg: `berhasil melamar di`,
+      });
     }
-
-    return res.status(200).json({
-      msg: `berhasil melamar di ${findPerusahaan.DetailBasicPerusahaan.namaperusahaan}`,
-    });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(404).json({
       status: "Bad Request",
     });
   }

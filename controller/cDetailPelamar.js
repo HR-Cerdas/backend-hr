@@ -2,6 +2,8 @@ require("dotenv").config();
 const { MongoClient, ObjectId } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
+const path = require("path");
+const fs = require("fs");
 
 const moment = require("moment");
 require("mongodb-moment")(moment);
@@ -361,16 +363,43 @@ const addResume = async (req, res, next) => {
         status: "Bad Request",
         message: "data pelamar tidak ditemukan",
       });
+
+    let filenamektp = path.basename(`../${findAccountPelamar.pathCV}`);
+
+    const cekResumeNama = [];
+    const cekResumePath = [];
+    if (findAccountPelamar.pathCV === undefined) {
+      cekResumeNama.push(cv.filename);
+      cekResumePath.push(cv.path);
+    } else {
+      if (cv.filename === filenamektp) {
+        console.log("ya sudah");
+      } else {
+        const paths = `./assets/cv/${username}/${filenamektp}`;
+        fs.unlink(paths, function (err) {
+          if (err) {
+            throw err;
+          } else {
+            console.log("Successfully deleted the file.");
+          }
+        });
+
+        cekResumeNama.push(cv.filename);
+        cekResumePath.push(cv.path);
+      }
+    }
+
     await db.collection("profilepelamar").updateOne(
       { _id: findAccountPelamar._id },
       {
         $set: {
-          fileCV: cv.filename,
+          namaCV: cekResumeNama[0],
+          pathCV: cekResumePath[0],
         },
       }
     );
     return res.status(200).json({
-      msg: "berhasil Update Job",
+      msg: "berhasil Update Resume",
     });
   } catch (error) {
     return res.status(404).json({
