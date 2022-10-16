@@ -4,19 +4,6 @@ module.exports = (req, res, next) => {
   const response = new Response(res);
   const { location, residentialStatus, nationality, noHp, email } = req.body;
 
-  if (!noHp)
-    return response.Fail(
-      response.BadRequest,
-      "Bad Request",
-      "No hp tidak boleh kosong"
-    );
-  if (!email)
-    return response.Fail(
-      response.BadRequest,
-      "Bad Request",
-      "email tidak boleh kosong"
-    );
-
   const validEmail =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const isValidEmail = email.match(validEmail);
