@@ -151,7 +151,7 @@ const addWorkExperience = async (req, res, next) => {
           $set: {
             workExperience: [
               {
-                jobposition: jobPosition,
+                jobPosition: jobPosition,
                 company: company,
                 startDate: moment.utc(startDate),
                 endDate: dateEnd[0],
@@ -168,7 +168,7 @@ const addWorkExperience = async (req, res, next) => {
             workExperience: {
               $each: [
                 {
-                  jobosition: jobPosition,
+                  jobPosition: jobPosition,
                   company: company,
                   startDate: moment.utc(startDate),
                   endDate: dateEnd[0],
