@@ -58,10 +58,10 @@ const editDetailProfil = async (req, res, next) => {
 
     // Validation Bollean Gender Start
     const genderr = [];
-    if (gender === "true") {
-      genderr.push("laki - laki");
+    if (gender === "Perempuan") {
+      genderr.push("Perempuan");
     } else {
-      genderr.push("perempuan");
+      genderr.push("laki - laki");
     }
     // Validation Bollean Gender End
 
