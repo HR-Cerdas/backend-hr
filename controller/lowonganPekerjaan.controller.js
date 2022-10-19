@@ -4,6 +4,7 @@ const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
 const path = require("path");
 const fs = require("fs");
+const moment = require("moment");
 
 const createLowongan = async (req, res, next) => {
   const {
@@ -80,7 +81,7 @@ const createLowongan = async (req, res, next) => {
     });
   } catch (error) {
     return res.status(404).json({
-      status: "Bad Requestss",
+      status: "Bad Requests",
       message: error,
     });
   }
@@ -418,6 +419,106 @@ const deleteLowongan = async (req, res, next) => {
   }
 };
 
+const updateLowongan = async (req, res, next) => {
+  const {
+    position,
+    placementCity,
+    salarymin,
+    salarymax,
+    tesRequired,
+    skill,
+    jobDescription,
+    Essay,
+    startdate,
+    enddate,
+  } = req.body;
+  const id = req.params.id;
+  const { username } = req.user;
+
+  try {
+    const findLowongan = await db
+      .collection("lowongan_pekerjaan")
+      .findOne({ _id: ObjectId(id) });
+    if (!findLowongan) {
+      return res.status(400).json({
+        message: `Hanya perusahaan ${findLowongan.namaPerusahaan} yang dapat mengganti lowongan`,
+      });
+    }
+    const findHr = await db
+      .collection("profilehrs")
+      .findOne({ username: username });
+    if (!findHr) {
+      return res.status(400).json({
+        message: "data hr tidak ditemukan",
+      });
+    }
+
+    const rupiah = number => {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(number);
+    };
+    const salary = `${rupiah(salarymin)} - ${rupiah(salarymax)}`;
+
+    const require = [];
+    if (tesRequired === "true") {
+      require.push("true");
+    } else {
+      require.push("false");
+    }
+
+    const esay = [];
+    if (Essay === "true") {
+      esay.push("true");
+    } else {
+      esay.push("false");
+    }
+
+    const profileImage = [];
+    if (findHr.DetailBasicPerusahaan === undefined) {
+      profileImage.push("");
+    } else {
+      profileImage.push(findHr.DetailBasicPerusahaan.fotoperusahaan);
+    }
+
+    const updateLowongan = await db.collection("lowongan_pekerjaan").updateOne(
+      { _id: ObjectId(id) },
+      {
+        $set: {
+          position: position,
+          placementCity: placementCity,
+          skills: skill,
+          salary: salary,
+          tesrequired: require[0],
+          jobdescription: jobDescription,
+          essay: esay[0],
+          profileImage: profileImage[0],
+          start_date: startdate,
+          end_date: enddate,
+          updated_ad: new Date(
+            Date.UTC(
+              moment().get("year"),
+              moment().get("month"),
+              moment().get("date"),
+              moment().get("hour"),
+              moment().get("minute"),
+              moment().get("second")
+            )
+          ),
+        },
+      }
+    );
+    return res.status(200).json({
+      message: "Berhasil Update Lowongan",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+
 module.exports = {
   createLowongan,
   getAllLowongan,
@@ -426,4 +527,5 @@ module.exports = {
   getAllDataPelamarApply,
   getLowonganhr,
   deleteLowongan,
+  updateLowongan,
 };
