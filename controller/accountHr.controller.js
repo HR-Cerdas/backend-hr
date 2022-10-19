@@ -2,11 +2,12 @@
 require("dotenv").config();
 // Menggunakan .env End
 const bcrypt = require("bcryptjs");
-const { MongoClient, ObjectId } = require("mongodb");
+const { MongoClient, ObjectId, Timestamp } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
 const { kirimEmail } = require("../helpers/email");
 const { signToken, checkPassword, tokenCheck } = require("../misc/auth");
+const moment = require("moment");
 
 const register = async (req, res, next) => {
   const {
@@ -62,12 +63,23 @@ const register = async (req, res, next) => {
         first_name: first_name,
         last_name: last_name,
       },
-      namaPerusahaan:namaPerusahaan,
+      namaPerusahaan: namaPerusahaan,
       username: username,
       password: hashPassword,
       email: email,
       noHp: noHp,
       resetPasswordLink: "",
+      created_at: new Date(
+        Date.UTC(
+          moment().get("year"),
+          moment().get("month"),
+          moment().get("date"),
+          moment().get("hour"),
+          moment().get("minute"),
+          moment().get("second")
+        )
+      ),
+      updated_at: new Date(moment().format(`YYYY-MM-DDThh:mm:ss`)),
     });
     // Register Input End
 
@@ -138,9 +150,16 @@ const forgotPassword = async (req, res, next) => {
     // Create Token End
 
     // Create Update Document Start
-    await db
-      .collection("profilehrs")
-      .updateOne({ _id: findEmail._id }, { $set: { resetPasswordLink: cek } });
+    await db.collection("profilehrs").updateOne(
+      { _id: findEmail._id },
+      {
+        $set: {
+          resetPasswordLink: cek,
+          updated_by: findEmail._id,
+          updated_at: moment().format("DD/MM/YYYY, h:mm:ss a"),
+        },
+      }
+    );
     // Create Update Document End
 
     // Template Text Email Start
@@ -206,12 +225,17 @@ const resetPassword = async (req, res, next) => {
 
     // Create Update Document Start
     if (findToken) {
-      await db
-        .collection("profilehrs")
-        .updateOne(
-          { _id: findToken._id },
-          { $set: { password: hashResetPassword, resetPasswordLink: "" } }
-        );
+      await db.collection("profilehrs").updateOne(
+        { _id: findToken._id },
+        {
+          $set: {
+            password: hashResetPassword,
+            resetPasswordLink: "",
+            updated_by: findToken._id,
+            updated_at: moment().format("DD/MM/YYYY, h:mm:ss a"),
+          },
+        }
+      );
     }
     // Create Update Document End
 

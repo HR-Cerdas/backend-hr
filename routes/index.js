@@ -24,7 +24,7 @@ router.use("/lowonganpekerjaan", lowonganPekerjaan);
 router.use("/postalcode", postalcode);
 router.use("/detailpelamar", authHeader, detailPelamar);
 router.use("/detailperusahaan", authHeader, detailPerusahaan);
-router.use("/", authHeader, nyoba);
+router.use("/", nyoba);
 // use Route End
 
 module.exports = router;

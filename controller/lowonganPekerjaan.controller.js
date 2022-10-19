@@ -172,90 +172,95 @@ const applyLowongan = async (req, res, next) => {
     //   });
     // }
 
-    const cekResumeNama = [];
-    const cekResumePath = [];
+    // Query A untuk mencari apakah terdapat pelamar dalam lowongan yang ingin di aplly
+    const a = await db
+      .collection("lowongan_pekerjaan")
+      .find({
+        _id: ObjectId(id),
+        "Pelamar.id_pelamar": ObjectId(findIdPelamar._id),
+      })
+      .toArray();
+    // console.log(a);
+    if (a[0] === undefined) {
+      const cekResumeNama = [];
+      const cekResumePath = [];
 
-    if (findIdPelamar.pathCV === undefined) {
-      if (resume === undefined) {
-        return res.status(400).json({
-          status: "Bad Request",
-          message: "Harus Menambahkan CV",
-        });
-      } else {
-        await db.collection("profilepelamar").updateOne(
-          { _id: ObjectId(findIdPelamar._id) },
-          {
-            $set: {
-              namaCV: resume.filename,
-              pathCV: resume.path,
-            },
-          }
-        );
-        cekResumeNama.push(resume.filename);
-        cekResumePath.push(resume.path);
-      }
-    } else {
-      let filenameCv = path.basename(`../${findIdPelamar.pathCV}`);
-      if (resume === undefined) {
-        // findLowongan.Pelamar.map(e => {
-        //   if (e.id_pelamar.toString() === findIdPelamar._id.toString()) {
-        //     return res.status(400).json({
-        //       status: "Bad Request",
-        //       message: "Anda Telah Apply di Lowongan ini",
-        //     });
-        //   } else {
-
-        //   }
-        // });
-        cekResumePath.push(findIdPelamar.pathCV);
-        cekResumeNama.push(filenameCv);
-      } else {
-        if (resume.filename === filenameCv) {
+      if (findIdPelamar.pathCV === undefined) {
+        if (resume === undefined) {
           return res.status(400).json({
             status: "Bad Request",
-            message: "Anda Telah Apply di Lowongan ini",
+            message: "Harus Menambahkan CV",
           });
         } else {
-          const paths = `./assets/cv/${username}/${resume.filename}`;
-          fs.unlink(paths, err => {
-            if (err) console.log(err);
-            else {
-              console.log("\nDeleted file: example_file.txt");
-            }
-          });
-        }
-        cekResumePath.push(findIdPelamar.pathCV);
-        cekResumeNama.push(filenameCv);
-      }
-    }
-
-    if (findLowongan.Pelamar === undefined) {
-      await db.collection("lowongan_pekerjaan").updateOne(
-        { _id: ObjectId(findLowongan._id) },
-        {
-          $set: {
-            Pelamar: [
-              {
-                id_pelamar: findIdPelamar._id,
-                nomer: nomer,
-                alasan: alasan,
-                namaResume: cekResumeNama[0],
-                pathResume: cekResumePath[0],
+          await db.collection("profilepelamar").updateOne(
+            { _id: ObjectId(findIdPelamar._id) },
+            {
+              $set: {
+                namaCV: resume.filename,
+                pathCV: resume.path,
               },
-            ],
-          },
+            }
+          );
+          cekResumeNama.push(resume.filename);
+          cekResumePath.push(resume.path);
         }
-      );
-      return res.status(200).json({
-        msg: `berhasil melamar di`,
-      });
-    } else {
-      await db.collection("lowongan_pekerjaan").updateOne(
-        { _id: ObjectId(findLowongan._id) },
-        {
-          $push: {
-            Pelamar: {
-              $each: [
+      } else {
+        let filenameCv = path.basename(`../${findIdPelamar.pathCV}`);
+        if (resume === undefined) {
+          // const a = await db
+          //   .collection("lowongan_pekerjaan")
+          //   .find({
+          //     _id: ObjectId(findLowongan._id),
+          //     "Pelamar.id_pelamar": ObjectId(findIdPelamar._id.toString()),
+          //   })
+          //   .toArray();
+          // if (a) {
+          //   return res.status(400).json({
+          //     status: "Bad Request",
+          //     message: "Anda Telah Apply di Lowongan ini",
+          //   });
+          // } else {
+          cekResumePath.push(findIdPelamar.pathCV);
+          cekResumeNama.push(filenameCv);
+          // }
+        } else {
+          if (resume.filename === filenameCv) {
+            // const a = await db
+            //   .collection("lowongan_pekerjaan")
+            //   .find({
+            //     _id: ObjectId(findLowongan._id),
+            //     "Pelamar.id_pelamar": ObjectId(findIdPelamar._id.toString()),
+            //   })
+            //   .toArray();
+            // if (a) {
+            //   return res.status(400).json({
+            //     status: "Bad Request",
+            //     message: "Anda Telah Apply di Lowongan ini",
+            //   });
+            // } else {
+            cekResumePath.push(findIdPelamar.pathCV);
+            cekResumeNama.push(filenameCv);
+            // }
+          } else {
+            const paths = `./assets/cv/${username}/${resume.filename}`;
+            fs.unlink(paths, err => {
+              if (err) console.log(err);
+              else {
+                console.log("\nDeleted file: example_file.txt");
+              }
+            });
+          }
+          cekResumePath.push(findIdPelamar.pathCV);
+          cekResumeNama.push(filenameCv);
+        }
+      }
+
+      if (findLowongan.Pelamar === undefined) {
+        await db.collection("lowongan_pekerjaan").updateOne(
+          { _id: ObjectId(findLowongan._id) },
+          {
+            $set: {
+              Pelamar: [
                 {
                   id_pelamar: findIdPelamar._id,
                   nomer: nomer,
@@ -265,11 +270,44 @@ const applyLowongan = async (req, res, next) => {
                 },
               ],
             },
-          },
+          }
+        );
+        return res.status(200).json({
+          msg: `berhasil melamar di`,
+        });
+      } else {
+        await db.collection("lowongan_pekerjaan").updateOne(
+          { _id: ObjectId(findLowongan._id) },
+          {
+            $push: {
+              Pelamar: {
+                $each: [
+                  {
+                    id_pelamar: findIdPelamar._id,
+                    nomer: nomer,
+                    alasan: alasan,
+                    namaResume: cekResumeNama[0],
+                    pathResume: cekResumePath[0],
+                  },
+                ],
+              },
+            },
+          }
+        );
+        return res.status(200).json({
+          msg: `berhasil melamar dissss`,
+        });
+      }
+    } else {
+      const paths = `./assets/cv/${username}/${resume.filename}`;
+      fs.unlink(paths, err => {
+        if (err) console.log(err);
+        else {
+          console.log("\nDeleted file: example_file.txt");
         }
-      );
-      return res.status(200).json({
-        msg: `berhasil melamar dissss`,
+      });
+      return res.status(400).json({
+        msg: "Anda Telah Aplly Di Lowongan ini",
       });
     }
   } catch (error) {
