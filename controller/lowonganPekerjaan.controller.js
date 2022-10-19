@@ -255,6 +255,8 @@ const applyLowongan = async (req, res, next) => {
         }
       }
 
+      const name = findIdPelamar.name.first_name + findIdPelamar.name.last_name;
+
       if (findLowongan.Pelamar === undefined) {
         await db.collection("lowongan_pekerjaan").updateOne(
           { _id: ObjectId(findLowongan._id) },
@@ -263,6 +265,7 @@ const applyLowongan = async (req, res, next) => {
               Pelamar: [
                 {
                   id_pelamar: findIdPelamar._id,
+                  name: name,
                   nomer: nomer,
                   alasan: alasan,
                   namaResume: cekResumeNama[0],
@@ -284,6 +287,7 @@ const applyLowongan = async (req, res, next) => {
                 $each: [
                   {
                     id_pelamar: findIdPelamar._id,
+                    name: name,
                     nomer: nomer,
                     alasan: alasan,
                     namaResume: cekResumeNama[0],

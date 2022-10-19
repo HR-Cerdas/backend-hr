@@ -18,6 +18,7 @@ const register = async (req, res, next) => {
     confPassword,
     username,
   } = req.body;
+  const random = Math.floor(Math.random() * 90 + 10);
   try {
     // Check Email Ready Start
     const findEmail = await db
@@ -68,6 +69,20 @@ const register = async (req, res, next) => {
       email: email,
       noHp: noHp,
       resetPasswordLink: "",
+      Score: {
+        score_utama: random,
+        o: random,
+        c: random,
+        e: random,
+        a: random,
+        n: random,
+        travel: random,
+        food: random,
+        sport: random,
+        fashion: random,
+        sentimen_positif: random,
+        sentimen_negatif: random,
+      },
     });
     // Register Input End
 
