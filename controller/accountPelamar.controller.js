@@ -18,7 +18,7 @@ const register = async (req, res, next) => {
     confPassword,
     username,
   } = req.body;
-  const random = Math.floor(Math.random() * 90 + 10);
+
   try {
     // Check Email Ready Start
     const findEmail = await db
@@ -70,18 +70,18 @@ const register = async (req, res, next) => {
       noHp: noHp,
       resetPasswordLink: "",
       Score: {
-        score_utama: random,
-        o: random,
-        c: random,
-        e: random,
-        a: random,
-        n: random,
-        travel: random,
-        food: random,
-        sport: random,
-        fashion: random,
-        sentimen_positif: random,
-        sentimen_negatif: random,
+        score_utama: Math.floor(Math.random() * 90 + 10),
+        o: Math.floor(Math.random() * 90 + 10),
+        c: Math.floor(Math.random() * 90 + 10),
+        e: Math.floor(Math.random() * 90 + 10),
+        a: Math.floor(Math.random() * 90 + 10),
+        n: Math.floor(Math.random() * 90 + 10),
+        travel: Math.floor(Math.random() * 90 + 10),
+        food: Math.floor(Math.random() * 90 + 10),
+        sport: Math.floor(Math.random() * 90 + 10),
+        fashion: Math.floor(Math.random() * 90 + 10),
+        sentimen_positif: Math.floor(Math.random() * 90 + 10),
+        sentimen_negatif: Math.floor(Math.random() * 90 + 10),
       },
     });
     // Register Input End
