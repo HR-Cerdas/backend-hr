@@ -8,6 +8,7 @@ const {
   getToken,
   getprofilid,
   getApllyPelamar,
+  getprofilidByField,
 } = require("../controller/accountPelamar.controller");
 const router = express.Router();
 // Get Module Controller End
@@ -33,5 +34,6 @@ router.put("/resetPassword", resetPasswordValidation, resetPassword);
 router.get("/getToken", getToken);
 router.get("/profile", authHeader, getprofilid);
 router.get("/gethistoryaplly", authHeader, getApllyPelamar);
+router.get("/getdetailpelamar/id/:id", getprofilidByField);
 
 module.exports = router;

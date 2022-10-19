@@ -261,6 +261,24 @@ const getprofilid = async (req, res) => {
   }
 };
 
+const getprofilidByField = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const findhr = await db.collection("profilepelamar").findOne({
+      _id: ObjectId(id),
+    });
+    if (!findhr)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+
+    res.status(200).json({ data: findhr });
+  } catch (error) {
+    res.status(404).json({ msg: "Bad Request" });
+  }
+};
+
 const getApllyPelamar = async (req, res, next) => {
   const { id } = req.user;
   try {
@@ -292,4 +310,5 @@ module.exports = {
   getToken,
   getprofilid,
   getApllyPelamar,
+  getprofilidByField,
 };
