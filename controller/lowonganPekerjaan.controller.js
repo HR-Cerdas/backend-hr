@@ -434,28 +434,30 @@ const getAllDataPelamarApply = async (req, res, next) => {
         status: "Bad Request",
         message: "data hr tidak ditemukan",
       });
-
     const findLowonganByidHr = await db
       .collection("lowongan_pekerjaan")
       .findOne({
-        id_hr: ObjectId(id),
+        _id: ObjectId(idlowongan),
       });
     if (!findLowonganByidHr)
       return res.status(400).json({
         status: "Bad Request",
         message: "data lowongan pekerjaan tidak ditemukan",
       });
-    if (
-      findLowonganByidHr._id.toString() === idlowongan &&
-      findLowonganByidHr.id_hr.toString() === id
-    ) {
-      return res.status(200).json({
-        msg: findLowonganByidHr.Pelamar,
-      });
+
+    if (findLowonganByidHr.id_hr.toString() === findIdhr._id.toString()) {
+      if (findLowonganByidHr.Pelamar === undefined) {
+        return res.status(400).json({
+          data: "Data Pelamar Tidak Ditemukan",
+        });
+      } else {
+        return res.status(200).json({
+          data: findLowonganByidHr.Pelamar,
+        });
+      }
     } else {
       return res.status(400).json({
-        status: "Bad Request",
-        message: "data lowongan pekerjaan tidak ditemukan",
+        data: "Data Hr dan Pelamar Tidak Ditemukan",
       });
     }
   } catch (error) {
