@@ -257,7 +257,31 @@ const getprofilid = async (req, res) => {
 
     res.status(200).json({ data: findhr });
   } catch (error) {
-    res.status(404).json({ msg: "Not Found" });
+    res.status(404).json({ msg: "Bad Request" });
+  }
+};
+
+const getApllyPelamar = async (req, res, next) => {
+  const { id } = req.user;
+  try {
+    const findPelamar = await db
+      .collection("profilepelamar")
+      .findOne({ _id: ObjectId(id) });
+    if (!findPelamar) {
+      res.status(400).json({
+        status: "Not Found",
+        msg: "Data Pelamar Tidak Ditemukan",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: findPelamar.apllyLowonganPerusahaan,
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "Bad Request",
+    });
   }
 };
 
@@ -268,4 +292,5 @@ module.exports = {
   resetPassword,
   getToken,
   getprofilid,
+  getApllyPelamar,
 };

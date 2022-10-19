@@ -7,6 +7,7 @@ const {
   resetPassword,
   getToken,
   getprofilid,
+  getApllyPelamar,
 } = require("../controller/accountPelamar.controller");
 const router = express.Router();
 // Get Module Controller End
@@ -31,5 +32,6 @@ router.put("/resetPassword", resetPasswordValidation, resetPassword);
 // Percobaan
 router.get("/getToken", getToken);
 router.get("/profile", authHeader, getprofilid);
+router.get("/gethistoryaplly", authHeader, getApllyPelamar);
 
 module.exports = router;
