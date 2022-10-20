@@ -11,6 +11,7 @@ const {
   deleteLowongan,
   updateLowongan,
   sortLowongan,
+  getAllPelamarAllLowongan,
 } = require("../controller/lowonganPekerjaan.controller");
 // Get Route End
 
@@ -32,5 +33,6 @@ router.get("/getlowonganhr", authHeader, getLowonganhr);
 router.delete("/deletelowongan/id/:id", authHeader, deleteLowongan);
 router.put("/update/id/:id", authHeader, updateLowongan);
 router.post("/getdetailpelamar", authHeader, sortLowongan);
+router.get("/allpelamarapllylowongan", authHeader, getAllPelamarAllLowongan);
 
 module.exports = router;

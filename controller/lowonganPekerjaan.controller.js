@@ -649,15 +649,74 @@ const sortLowongan = async (req, res, next) => {
       .findOne({ _id: ObjectId(findLowongan._id) });
 
     if (pelamar.Pelamar[0].name === "dataPertama") {
-      const a = pelamar.Pelamar.filter(person => person.name != "dataPertama");
-      const compareAge = (c, b) => {
-        return b.score_utama - c.score_utama;
-      };
-      const f = a.sort(compareAge);
-      return res.status(200).json({
-        data: f,
+      if (findLowongan.id_hr.toString() === findHr._id.toString()) {
+        const a = pelamar.Pelamar.filter(
+          person => person.name != "dataPertama"
+        );
+        const compareAge = (c, b) => {
+          return b.score_utama - c.score_utama;
+        };
+        const f = a.sort(compareAge);
+        return res.status(200).json({
+          data: f,
+        });
+      } else {
+        return res.status(400).json({
+          msg: "NOT FOUND",
+        });
+      }
+    } else {
+      if (findLowongan.id_hr.toString() === findHr._id.toString()) {
+        const compareAge = (c, b) => {
+          return b.score_utama - c.score_utama;
+        };
+        const f = pelamar.Pelamar.sort(compareAge);
+        return res.status(200).json({
+          data: f,
+        });
+      } else {
+        return res.status(400).json({
+          msg: "NOT FOUND",
+        });
+      }
+    }
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+
+const getAllPelamarAllLowongan = async (req, res, next) => {
+  const { id } = req.user;
+  try {
+    const findHr = await db.collection("profilehrs").findOne({
+      _id: ObjectId(id),
+    });
+    if (!findHr) {
+      return res.status(400).json({
+        msg: "Data Hr Tidak Ditemukan",
       });
     }
+
+    const findLowongan = await db
+      .collection("lowongan_pekerjaan")
+      .find({
+        id_hr: ObjectId(findHr._id),
+      })
+      .toArray();
+    const kon = [];
+    findLowongan.map(e => {
+      if (e.Pelamar === undefined) {
+        console.log("a");
+      } else {
+        kon.push(e.Pelamar);
+      }
+    });
+
+    return res.status(200).json({
+      data: kon,
+    });
   } catch (error) {
     return res.status(404).json({
       status: "Bad Request",
@@ -675,4 +734,5 @@ module.exports = {
   deleteLowongan,
   updateLowongan,
   sortLowongan,
+  getAllPelamarAllLowongan,
 };
