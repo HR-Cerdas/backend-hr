@@ -625,33 +625,39 @@ const updateLowongan = async (req, res, next) => {
 
 const sortLowongan = async (req, res, next) => {
   const { position } = req.body;
-  const { username } = req.user;
+  const { id } = req.user;
   console.log(position);
   try {
-    // const findLowongan = await db
-    //   .collection("lowongan_pekerjaan")
-    //   .findOne({ position: position });
-    // if (!findLowongan) {
-    //   return res.status(400).json({
-    //     message: `Tidak Ditemukan Data Lowongan`,
-    //   });
-    // }
-    // const findHr = await db
-    //   .collection("profilehrs")
-    //   .findOne({ username: username });
-    // if (!findHr) {
-    //   return res.status(400).json({
-    //     message: "data hr tidak ditemukan",
-    //   });
-    // }
-    // const a = await db
-    //   .collection("lowongan_pekerjaan")
-    //   .find({ _id: ObjectId(findLowongan._id) })
-    //   .sort({ "Pelamar.score_utama": 1 });
+    const findLowongan = await db
+      .collection("lowongan_pekerjaan")
+      .findOne({ position: position });
+    if (!findLowongan) {
+      return res.status(400).json({
+        message: `Tidak Ditemukan Data Lowongan`,
+      });
+    }
+    const findHr = await db
+      .collection("profilehrs")
+      .findOne({ _id: ObjectId(id) });
+    if (!findHr) {
+      return res.status(400).json({
+        message: "data hr tidak ditemukan",
+      });
+    }
+    const pelamar = await db
+      .collection("lowongan_pekerjaan")
+      .findOne({ _id: ObjectId(findLowongan._id) });
 
-    return res.status(200).json({
-      data: "jembot",
-    });
+    if (pelamar.Pelamar[0].name === "dataPertama") {
+      const a = pelamar.Pelamar.filter(person => person.name != "dataPertama");
+      const compareAge = (c, b) => {
+        return b.score_utama - c.score_utama;
+      };
+      const f = a.sort(compareAge);
+      return res.status(200).json({
+        data: f,
+      });
+    }
   } catch (error) {
     return res.status(404).json({
       status: "Bad Request",
