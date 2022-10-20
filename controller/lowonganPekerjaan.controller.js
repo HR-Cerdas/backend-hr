@@ -281,6 +281,7 @@ const applyLowongan = async (req, res, next) => {
                   alasan: alasan,
                   namaResume: cekResumeNama[0],
                   pathResume: cekResumePath[0],
+                  score_utama: findIdPelamar.Score.score_utama,
                 },
               ],
             },
@@ -345,6 +346,7 @@ const applyLowongan = async (req, res, next) => {
                     alasan: alasan,
                     namaResume: cekResumeNama[0],
                     pathResume: cekResumePath[0],
+                    score_utama: findIdPelamar.Score.score_utama,
                   },
                 ],
               },
@@ -533,6 +535,7 @@ const updateLowongan = async (req, res, next) => {
     startdate,
     enddate,
   } = req.body;
+  console.log(position);
   const id = req.params.id;
   const { username } = req.user;
 
@@ -620,6 +623,42 @@ const updateLowongan = async (req, res, next) => {
   }
 };
 
+const sortLowongan = async (req, res, next) => {
+  const { position } = req.body;
+  const { username } = req.user;
+  console.log(position);
+  try {
+    // const findLowongan = await db
+    //   .collection("lowongan_pekerjaan")
+    //   .findOne({ position: position });
+    // if (!findLowongan) {
+    //   return res.status(400).json({
+    //     message: `Tidak Ditemukan Data Lowongan`,
+    //   });
+    // }
+    // const findHr = await db
+    //   .collection("profilehrs")
+    //   .findOne({ username: username });
+    // if (!findHr) {
+    //   return res.status(400).json({
+    //     message: "data hr tidak ditemukan",
+    //   });
+    // }
+    // const a = await db
+    //   .collection("lowongan_pekerjaan")
+    //   .find({ _id: ObjectId(findLowongan._id) })
+    //   .sort({ "Pelamar.score_utama": 1 });
+
+    return res.status(200).json({
+      data: "jembot",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+
 module.exports = {
   createLowongan,
   getAllLowongan,
@@ -629,4 +668,5 @@ module.exports = {
   getLowonganhr,
   deleteLowongan,
   updateLowongan,
+  sortLowongan,
 };

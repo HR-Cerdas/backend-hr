@@ -4,20 +4,23 @@ const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
 
 const ayo = async (req, res, next) => {
-  try {
-    const a = await db
-      .collection("lowongan_pekerjaan")
-      .find({
-        _id: ObjectId("6348df5bf490384ba5100a85"),
-        "Pelamar.id_pelamar": ObjectId("633594eba9a9101c9d8040a4asdasda"),
-      })
-      .toArray();
-  } catch (error) {
-    return res.status(404).json({
-      // msg: "untuk cek sudah pernah melamar atau belom " + a,
-      msg: "terserah",
-    });
-  }
+  const { a, b } = req.body;
+  console.log(a);
+  console.log(b);
+  // try {
+  //   const a = await db
+  //     .collection("lowongan_pekerjaan")
+  //     .find({
+  //       _id: ObjectId("6348df5bf490384ba5100a85"),
+  //       "Pelamar.id_pelamar": ObjectId("633594eba9a9101c9d8040a4asdasda"),
+  //     })
+  //     .toArray();
+  // } catch (error) {
+  //   return res.status(404).json({
+  //     // msg: "untuk cek sudah pernah melamar atau belom " + a,
+  //     msg: "terserah",
+  //   });
+  // }
 
   // const b = [];
   // for (let i = 0; i < a.length; i++) {
