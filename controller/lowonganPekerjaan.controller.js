@@ -624,13 +624,13 @@ const updateLowongan = async (req, res, next) => {
 };
 
 const sortLowongan = async (req, res, next) => {
-  const { position } = req.body;
+  const { idLowongan } = req.body;
   const { id } = req.user;
-  console.log(position);
+  console.log(idLowongan);
   try {
     const findLowongan = await db
       .collection("lowongan_pekerjaan")
-      .findOne({ position: position });
+      .findOne({ _id: ObjectId(idLowongan) });
     if (!findLowongan) {
       return res.status(400).json({
         message: `Tidak Ditemukan Data Lowongan`,
