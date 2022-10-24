@@ -79,7 +79,16 @@ const register = async (req, res, next) => {
           moment().get("second")
         )
       ),
-      updated_at: new Date(moment().format(`YYYY-MM-DDThh:mm:ss`)),
+      updated_at: new Date(
+        Date.UTC(
+          moment().get("year"),
+          moment().get("month"),
+          moment().get("date"),
+          moment().get("hour"),
+          moment().get("minute"),
+          moment().get("second")
+        )
+      ),
     });
     // Register Input End
 
@@ -156,7 +165,16 @@ const forgotPassword = async (req, res, next) => {
         $set: {
           resetPasswordLink: cek,
           updated_by: findEmail._id,
-          updated_at: moment().format("DD/MM/YYYY, h:mm:ss a"),
+          updated_at: new Date(
+            Date.UTC(
+              moment().get("year"),
+              moment().get("month"),
+              moment().get("date"),
+              moment().get("hour"),
+              moment().get("minute"),
+              moment().get("second")
+            )
+          ),
         },
       }
     );
@@ -232,7 +250,16 @@ const resetPassword = async (req, res, next) => {
             password: hashResetPassword,
             resetPasswordLink: "",
             updated_by: findToken._id,
-            updated_at: moment().format("DD/MM/YYYY, h:mm:ss a"),
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
           },
         }
       );
