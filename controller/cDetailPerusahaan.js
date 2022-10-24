@@ -7,7 +7,7 @@ const fs = require("fs");
 
 const editDetailBasicInfo = async (req, res, next) => {
   const { username, id } = req.user;
-  const {alamat, noPerusahaan, email, website, deskripsi } =
+  const { industryCategory, Capacity, alamat, noPerusahaan, email, website, deskripsi } =
     req.body;
   const fotoProfilPerusahaan = req.file;
   try {
@@ -52,6 +52,8 @@ const editDetailBasicInfo = async (req, res, next) => {
           DetailBasicPerusahaan: {
             alamat: alamat,
             noPerusahaan: noPerusahaan,
+            industrycategory: industryCategory,
+            capacity: Capacity,
             email: email,
             website: website,
             fotoperusahaan: profil[0],
@@ -73,7 +75,7 @@ const editDetailBasicInfo = async (req, res, next) => {
 
 const editDetailProfile = async (req, res, next) => {
   const { username } = req.user;
-  const { industryCategory, Capacity, DetailDescription } = req.body;
+  const {  DetailDescription } = req.body;
   const ktp = req.files;
   const tdp = req.files;
   const siup = req.files;
@@ -236,8 +238,6 @@ const editDetailProfile = async (req, res, next) => {
       {
         $set: {
           DetailProfile: {
-            industrycategory: industryCategory,
-            capacity: Capacity,
             deskripsi: DetailDescription,
             filektp: textKtp[0],
             filetdp: textTdp[0],
