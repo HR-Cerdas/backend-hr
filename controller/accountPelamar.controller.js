@@ -69,6 +69,26 @@ const register = async (req, res, next) => {
       email: email,
       noHp: noHp,
       resetPasswordLink: "",
+      created_at: new Date(
+        Date.UTC(
+          moment().get("year"),
+          moment().get("month"),
+          moment().get("date"),
+          moment().get("hour"),
+          moment().get("minute"),
+          moment().get("second")
+        )
+      ),
+      updated_at: new Date(
+        Date.UTC(
+          moment().get("year"),
+          moment().get("month"),
+          moment().get("date"),
+          moment().get("hour"),
+          moment().get("minute"),
+          moment().get("second")
+        )
+      ),
       Score: {
         score_utama: Math.floor(Math.random() * 90 + 10),
         o: Math.floor(Math.random() * 90 + 10),
@@ -154,9 +174,25 @@ const forgotPassword = async (req, res, next) => {
     // Create Token End
 
     // Create Update Document Start
-    await db
-      .collection("profilepelamar")
-      .updateOne({ _id: findEmail._id }, { $set: { resetPasswordLink: cek } });
+    await db.collection("profilepelamar").updateOne(
+      { _id: findEmail._id },
+      {
+        $set: {
+          resetPasswordLink: cek,
+          update_by: findEmail._id,
+          updated_at: new Date(
+            Date.UTC(
+              moment().get("year"),
+              moment().get("month"),
+              moment().get("date"),
+              moment().get("hour"),
+              moment().get("minute"),
+              moment().get("second")
+            )
+          ),
+        },
+      }
+    );
     // Create Update Document End
 
     // Template Text Email Start
@@ -223,12 +259,26 @@ const resetPassword = async (req, res, next) => {
 
     // Create Update Document Start
     if (findToken) {
-      await db
-        .collection("profilepelamar")
-        .updateOne(
-          { _id: findToken._id },
-          { $set: { password: hashResetPassword, resetPasswordLink: "" } }
-        );
+      await db.collection("profilepelamar").updateOne(
+        { _id: findToken._id },
+        {
+          $set: {
+            password: hashResetPassword,
+            resetPasswordLink: "",
+            update_by: findToken._id,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
+          },
+        }
+      );
     }
     // Create Update Document End
 
@@ -244,11 +294,14 @@ const resetPassword = async (req, res, next) => {
 };
 
 const getprofilid = async (req, res) => {
+  // Request id User
   const { id } = req.user;
   try {
+    // Find Account Pelamar
     const findhr = await db.collection("profilepelamar").findOne({
       _id: ObjectId(id),
     });
+    // Tidak Menemukan Pelamar
     if (!findhr)
       return res.status(400).json({
         status: "Bad Request",
@@ -262,11 +315,14 @@ const getprofilid = async (req, res) => {
 };
 
 const getprofilidByField = async (req, res) => {
+  // Request id By Params
   const id = req.params.id;
   try {
+    // Find Account Pelamar
     const findhr = await db.collection("profilepelamar").findOne({
       _id: ObjectId(id),
     });
+    // Tidak Menemukan Pelamar
     if (!findhr)
       return res.status(400).json({
         status: "Bad Request",
@@ -280,11 +336,14 @@ const getprofilidByField = async (req, res) => {
 };
 
 const getApllyPelamar = async (req, res, next) => {
+  // Request id User
   const { id } = req.user;
   try {
+    // Find Account Pelamar
     const findPelamar = await db
       .collection("profilepelamar")
       .findOne({ _id: ObjectId(id) });
+    // Tidak Menemukan Pelamar
     if (!findPelamar) {
       res.status(400).json({
         status: "Not Found",
