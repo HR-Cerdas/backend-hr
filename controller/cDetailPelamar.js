@@ -10,7 +10,7 @@ require("mongodb-moment")(moment);
 
 // Get All Data Sesuai User Login
 const getDetailProfil = async (req, res, next) => {
-  // ambil data req
+  // ambil data req User
   const { username } = req.user;
   try {
     // Cari Document Ready or No Start
@@ -23,7 +23,6 @@ const getDetailProfil = async (req, res, next) => {
         message: "data pelamar tidak ditemukan",
       });
     // Cari Document Ready or No End
-
     return res.status(200).json({
       msg: findAccountPelamar,
     });
@@ -33,8 +32,9 @@ const getDetailProfil = async (req, res, next) => {
 };
 // Edit Detail Profil Pelamar
 const editDetailProfil = async (req, res, next) => {
-  // Ambil Data Req
+  // Ambil Data Req User
   const { id } = req.user;
+  // Ambil Data Req Body
   const {
     location,
     tanggalLahir,
@@ -92,19 +92,24 @@ const editDetailProfil = async (req, res, next) => {
     });
   }
 };
-// Get AboutMe Sesuai User Login
+// Update AboutMe Sesuai User Login
 const updateAbout = async (req, res, next) => {
+  // Ambil Data Req User
   const { username } = req.user;
+  // Ambil Data Req Body
   const { aboutme } = req.body;
   try {
+    // Find Account Pelamar
     const findAccountPelamar = await db.collection("profilepelamar").findOne({
       username: username,
     });
+    // Account error
     if (!findAccountPelamar)
       return res.status(400).json({
         status: "Bad Request",
         message: "data pelamar tidak ditemukan",
       });
+    // Update field about by account pelamar
     const updateAbout = await db.collection("profilepelamar").updateOne(
       { _id: findAccountPelamar._id },
       {
@@ -123,28 +128,35 @@ const updateAbout = async (req, res, next) => {
     });
   }
 };
+// Update Work Experience
 const addWorkExperience = async (req, res, next) => {
+  // Req User
   const { username } = req.user;
+  // Req Body
   const { jobPosition, company, startDate, endDate } = req.body;
 
   try {
+    // Find Account Pelamar
     const findAccountPelamar = await db.collection("profilepelamar").findOne({
       username: username,
     });
+    // Error Account Pelamar
     if (!findAccountPelamar)
       return res.status(400).json({
         status: "Bad Request",
         message: "data pelamar tidak ditemukan",
       });
-
+    // Condition field end Date Tidak di isi
     const dateEnd = [];
     if (endDate === "present") {
       dateEnd.push("present");
     } else {
       dateEnd.push(moment.utc(endDate));
     }
-
+    // Condition field experience kosong atau tidak
     if (findAccountPelamar.workExperience === undefined) {
+      // True
+      // Tambah Field experience By Account Pelamar
       await db.collection("profilepelamar").updateOne(
         { _id: findAccountPelamar._id },
         {
@@ -161,6 +173,8 @@ const addWorkExperience = async (req, res, next) => {
         }
       );
     } else {
+      // Field
+      // Tambah Data experience By Account Pelamar
       await db.collection("profilepelamar").updateOne(
         { _id: findAccountPelamar._id },
         {
@@ -188,28 +202,34 @@ const addWorkExperience = async (req, res, next) => {
     });
   }
 };
+// Update Edication
 const addEducation = async (req, res, next) => {
+  // Req User
   const { username } = req.user;
+  // Req Body
   const { lembaga, gelar, bidangStudy, startDate, endDate } = req.body;
-
   try {
+    // Find Account Pelamar
     const findAccountPelamar = await db.collection("profilepelamar").findOne({
       username: username,
     });
+    // Error Find Account Pelamar
     if (!findAccountPelamar)
       return res.status(400).json({
         status: "Bad Request",
         message: "data pelamar tidak ditemukan",
       });
-
+    // Condition field end Date Tidak di isi
     const dateEnd = [];
     if (endDate === "present") {
       dateEnd.push("present");
     } else {
       dateEnd.push(moment.utc(endDate));
     }
-
+    // Condition field Education ada atau tidak ada
     if (findAccountPelamar.addEducation === undefined) {
+      // True
+      // Tambah field Education
       const updateExperience = await db.collection("profilepelamar").updateOne(
         { _id: findAccountPelamar._id },
         {
@@ -227,6 +247,8 @@ const addEducation = async (req, res, next) => {
         }
       );
     } else {
+      // False
+      // Tambah data di Field Education
       await db.collection("profilepelamar").updateOne(
         { _id: findAccountPelamar._id },
         {
