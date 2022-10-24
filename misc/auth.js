@@ -4,7 +4,7 @@ const { JWT_SECRET } = process.env;
 
 // Setting Token & expired Start
 const signToken = payload =>
-  jwt.sign(payload, JWT_SECRET, { expiresIn: "2hr" });
+  jwt.sign(payload, JWT_SECRET, { expiresIn: "10m" });
 // Setting Token & expired End
 
 // Setting Check Password Hash Start
