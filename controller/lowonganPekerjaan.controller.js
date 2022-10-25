@@ -712,9 +712,7 @@ const getAllPelamarAllLowongan = async (req, res, next) => {
       if (e.Pelamar === undefined) {
         console.log("a");
       } else {
-        res.status(200).json({
-          data: e.Pelamar,
-        });
+        kon.push(e.Pelamar);
       }
     });
 
