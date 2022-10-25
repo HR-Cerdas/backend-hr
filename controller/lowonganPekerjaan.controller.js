@@ -199,8 +199,8 @@ const applyLowongan = async (req, res, next) => {
       if (findIdPelamar.pathCV === undefined) {
         if (resume === undefined) {
           return res.status(400).json({
-            status: "Bad Request",
-            message: "Harus Menambahkan CV",
+            $set: {namaCV: null,
+            pathCV: null }
           });
         } else {
           await db.collection("profilepelamar").updateOne(
