@@ -78,7 +78,39 @@ const editDetailProfil = async (req, res, next) => {
             gender: genderr[0],
             residentialStatus: residentialStatus,
             nationality: nationality,
+            created_by: findAccountPelamar.username,
+            created_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
           },
+          updated_at: new Date(
+            Date.UTC(
+              moment().get("year"),
+              moment().get("month"),
+              moment().get("date"),
+              moment().get("hour"),
+              moment().get("minute"),
+              moment().get("second")
+            )
+          ),
         },
       }
     );
@@ -115,6 +147,17 @@ const updateAbout = async (req, res, next) => {
       {
         $set: {
           aboutme: aboutme,
+          updated_by: findAccountPelamar.username,
+          updated_at: new Date(
+            Date.UTC(
+              moment().get("year"),
+              moment().get("month"),
+              moment().get("date"),
+              moment().get("hour"),
+              moment().get("minute"),
+              moment().get("second")
+            )
+          ),
         },
       }
     );
@@ -161,12 +204,48 @@ const addWorkExperience = async (req, res, next) => {
         { _id: findAccountPelamar._id },
         {
           $set: {
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
+          },
+          $set: {
             workExperience: [
               {
+                id_Experience: ObjectId(),
                 jobPosition: jobPosition,
                 company: company,
                 startDate: moment.utc(startDate),
                 endDate: dateEnd[0],
+                created_by: findAccountPelamar.username,
+                created_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+                updated_by: findAccountPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
               },
             ],
           },
@@ -178,14 +257,50 @@ const addWorkExperience = async (req, res, next) => {
       await db.collection("profilepelamar").updateOne(
         { _id: findAccountPelamar._id },
         {
+          $set: {
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
+          },
           $push: {
             workExperience: {
               $each: [
                 {
+                  id_Experience: ObjectId(),
                   jobPosition: jobPosition,
                   company: company,
                   startDate: moment.utc(startDate),
                   endDate: dateEnd[0],
+                  created_by: findAccountPelamar.username,
+                  created_at: new Date(
+                    Date.UTC(
+                      moment().get("year"),
+                      moment().get("month"),
+                      moment().get("date"),
+                      moment().get("hour"),
+                      moment().get("minute"),
+                      moment().get("second")
+                    )
+                  ),
+                  updated_by: findAccountPelamar.username,
+                  updated_at: new Date(
+                    Date.UTC(
+                      moment().get("year"),
+                      moment().get("month"),
+                      moment().get("date"),
+                      moment().get("hour"),
+                      moment().get("minute"),
+                      moment().get("second")
+                    )
+                  ),
                 },
               ],
             },
@@ -234,13 +349,49 @@ const addEducation = async (req, res, next) => {
         { _id: findAccountPelamar._id },
         {
           $set: {
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
+          },
+          $set: {
             addEducation: [
               {
+                id_Education: ObjectId(),
                 lembaga: lembaga,
                 gelar: gelar,
                 bidangStudy: bidangStudy,
                 startDate: moment.utc(startDate),
                 endDate: dateEnd[0],
+                created_by: findAccountPelamar.username,
+                created_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+                updated_by: findAccountPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
               },
             ],
           },
@@ -252,15 +403,51 @@ const addEducation = async (req, res, next) => {
       await db.collection("profilepelamar").updateOne(
         { _id: findAccountPelamar._id },
         {
+          $set: {
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
+          },
           $push: {
             addEducation: {
               $each: [
                 {
+                  id_Education: ObjectId(),
                   lembaga: lembaga,
                   gelar: gelar,
                   bidangStudy: bidangStudy,
                   startDate: moment.utc(startDate),
                   endDate: dateEnd[0],
+                  created_by: findAccountPelamar.username,
+                  created_at: new Date(
+                    Date.UTC(
+                      moment().get("year"),
+                      moment().get("month"),
+                      moment().get("date"),
+                      moment().get("hour"),
+                      moment().get("minute"),
+                      moment().get("second")
+                    )
+                  ),
+                  updated_by: findAccountPelamar.username,
+                  updated_at: new Date(
+                    Date.UTC(
+                      moment().get("year"),
+                      moment().get("month"),
+                      moment().get("date"),
+                      moment().get("hour"),
+                      moment().get("minute"),
+                      moment().get("second")
+                    )
+                  ),
                 },
               ],
             },
@@ -277,6 +464,7 @@ const addEducation = async (req, res, next) => {
     });
   }
 };
+// Update Skil
 const addSkill = async (req, res, next) => {
   const { username } = req.user;
   const { skill } = req.body;
@@ -295,6 +483,17 @@ const addSkill = async (req, res, next) => {
         {
           $set: {
             skills: skill,
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
           },
         }
       );
@@ -312,6 +511,17 @@ const addSkill = async (req, res, next) => {
         {
           $set: {
             skills: [...value],
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
           },
         }
       );
@@ -325,6 +535,7 @@ const addSkill = async (req, res, next) => {
     });
   }
 };
+// Update Jobinterest
 const addJobInterests = async (req, res, next) => {
   const { username } = req.user;
   const { job } = req.body;
@@ -343,6 +554,17 @@ const addJobInterests = async (req, res, next) => {
         {
           $set: {
             jobInterest: job,
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
           },
         }
       );
@@ -360,6 +582,17 @@ const addJobInterests = async (req, res, next) => {
         {
           $set: {
             jobInterest: [...value],
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
           },
         }
       );
@@ -373,6 +606,7 @@ const addJobInterests = async (req, res, next) => {
     });
   }
 };
+// Update Resume
 const addResume = async (req, res, next) => {
   const { username } = req.user;
   const cv = req.file;
@@ -417,6 +651,17 @@ const addResume = async (req, res, next) => {
         $set: {
           namaCV: cekResumeNama[0],
           pathCV: cekResumePath[0],
+          updated_by: findAccountPelamar.username,
+          updated_at: new Date(
+            Date.UTC(
+              moment().get("year"),
+              moment().get("month"),
+              moment().get("date"),
+              moment().get("hour"),
+              moment().get("minute"),
+              moment().get("second")
+            )
+          ),
         },
       }
     );
@@ -429,6 +674,7 @@ const addResume = async (req, res, next) => {
     });
   }
 };
+// Update Sosial Media
 const addSosialMedia = async (req, res, next) => {
   const { facebook, twitter, instagram, linkedin } = req.body;
   const { username } = req.user;
@@ -445,11 +691,46 @@ const addSosialMedia = async (req, res, next) => {
       { _id: findAccountPelamar._id },
       {
         $set: {
+          updated_by: findAccountPelamar.username,
+          updated_at: new Date(
+            Date.UTC(
+              moment().get("year"),
+              moment().get("month"),
+              moment().get("date"),
+              moment().get("hour"),
+              moment().get("minute"),
+              moment().get("second")
+            )
+          ),
+        },
+        $set: {
           sosialMedia: {
             facebook: facebook,
             twitter: twitter,
             instagram: instagram,
             linkedin: linkedin,
+            created_by: findAccountPelamar.username,
+            created_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
           },
         },
       }
@@ -463,6 +744,7 @@ const addSosialMedia = async (req, res, next) => {
     });
   }
 };
+// Update Organization
 const addOrganization = async (req, res, next) => {
   const { username } = req.user;
   const { organizationName, Role, startDate, endDate } = req.body;
@@ -481,12 +763,48 @@ const addOrganization = async (req, res, next) => {
         { _id: findAccountPelamar._id },
         {
           $set: {
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
+          },
+          $set: {
             addorganization: [
               {
+                id_Organization: ObjectId(),
                 organizationName: organizationName,
                 Role: Role,
                 startDate: moment.utc(startDate),
                 endDate: moment.utc(endDate),
+                created_by: findAccountPelamar.username,
+                created_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+                updated_by: findAccountPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
               },
             ],
           },
@@ -496,14 +814,50 @@ const addOrganization = async (req, res, next) => {
       await db.collection("profilepelamar").updateOne(
         { _id: findAccountPelamar._id },
         {
+          $set: {
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
+          },
           $push: {
             addorganization: {
               $each: [
                 {
+                  id_Organization: ObjectId(),
                   organizationName: organizationName,
                   Role: Role,
                   startDate: moment.utc(startDate),
                   endDate: moment.utc(endDate),
+                  created_by: findAccountPelamar.username,
+                  created_at: new Date(
+                    Date.UTC(
+                      moment().get("year"),
+                      moment().get("month"),
+                      moment().get("date"),
+                      moment().get("hour"),
+                      moment().get("minute"),
+                      moment().get("second")
+                    )
+                  ),
+                  updated_by: findAccountPelamar.username,
+                  updated_at: new Date(
+                    Date.UTC(
+                      moment().get("year"),
+                      moment().get("month"),
+                      moment().get("date"),
+                      moment().get("hour"),
+                      moment().get("minute"),
+                      moment().get("second")
+                    )
+                  ),
                 },
               ],
             },

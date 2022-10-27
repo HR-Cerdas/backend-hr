@@ -273,8 +273,22 @@ const applyLowongan = async (req, res, next) => {
           { _id: ObjectId(findLowongan._id) },
           {
             $set: {
+              updated_by: findIdPelamar.username,
+              updated_at: new Date(
+                Date.UTC(
+                  moment().get("year"),
+                  moment().get("month"),
+                  moment().get("date"),
+                  moment().get("hour"),
+                  moment().get("minute"),
+                  moment().get("second")
+                )
+              ),
+            },
+            $set: {
               Pelamar: [
                 {
+                  id: ObjectId(),
                   id_pelamar: findIdPelamar._id,
                   name: name,
                   nomer: nomer,
@@ -283,6 +297,28 @@ const applyLowongan = async (req, res, next) => {
                   pathResume: cekResumePath[0],
                   profile: findIdPelamar.img,
                   score_utama: findIdPelamar.Score.score_utama,
+                  created_by: findIdPelamar.username,
+                  created_at: new Date(
+                    Date.UTC(
+                      moment().get("year"),
+                      moment().get("month"),
+                      moment().get("date"),
+                      moment().get("hour"),
+                      moment().get("minute"),
+                      moment().get("second")
+                    )
+                  ),
+                  updated_by: findIdPelamar.username,
+                  updated_at: new Date(
+                    Date.UTC(
+                      moment().get("year"),
+                      moment().get("month"),
+                      moment().get("date"),
+                      moment().get("hour"),
+                      moment().get("minute"),
+                      moment().get("second")
+                    )
+                  ),
                 },
               ],
             },
@@ -295,6 +331,19 @@ const applyLowongan = async (req, res, next) => {
             },
             {
               $set: {
+                updated_by: findIdPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+              },
+              $set: {
                 apllyLowonganPerusahaan: [
                   {
                     id_lowongan: findLowongan._id,
@@ -302,6 +351,28 @@ const applyLowongan = async (req, res, next) => {
                     namaPerusahaan: findLowongan.namaPerusahaan,
                     salary: findLowongan.salary,
                     status: "sudah melamar",
+                    created_by: findIdPelamar.username,
+                    created_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
+                    updated_by: findIdPelamar.username,
+                    updated_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
                   },
                 ],
               },
@@ -313,6 +384,19 @@ const applyLowongan = async (req, res, next) => {
               _id: ObjectId(findIdPelamar._id),
             },
             {
+              $set: {
+                updated_by: findIdPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+              },
               $push: {
                 apllyLowonganPerusahaan: {
                   $each: [
@@ -322,6 +406,28 @@ const applyLowongan = async (req, res, next) => {
                       namaPerusahaan: findLowongan.namaPerusahaan,
                       salary: findLowongan.salary,
                       status: "sudah melamar",
+                      created_by: findIdPelamar.username,
+                      created_at: new Date(
+                        Date.UTC(
+                          moment().get("year"),
+                          moment().get("month"),
+                          moment().get("date"),
+                          moment().get("hour"),
+                          moment().get("minute"),
+                          moment().get("second")
+                        )
+                      ),
+                      updated_by: findIdPelamar.username,
+                      updated_at: new Date(
+                        Date.UTC(
+                          moment().get("year"),
+                          moment().get("month"),
+                          moment().get("date"),
+                          moment().get("hour"),
+                          moment().get("minute"),
+                          moment().get("second")
+                        )
+                      ),
                     },
                   ],
                 },
@@ -337,10 +443,24 @@ const applyLowongan = async (req, res, next) => {
         await db.collection("lowongan_pekerjaan").updateOne(
           { _id: ObjectId(findLowongan._id) },
           {
+            $set: {
+              updated_by: findIdPelamar.username,
+              updated_at: new Date(
+                Date.UTC(
+                  moment().get("year"),
+                  moment().get("month"),
+                  moment().get("date"),
+                  moment().get("hour"),
+                  moment().get("minute"),
+                  moment().get("second")
+                )
+              ),
+            },
             $push: {
               Pelamar: {
                 $each: [
                   {
+                    id: ObjectId(),
                     id_pelamar: findIdPelamar._id,
                     name: name,
                     nomer: nomer,
@@ -349,6 +469,28 @@ const applyLowongan = async (req, res, next) => {
                     pathResume: cekResumePath[0],
                     profile: findIdPelamar.img,
                     score_utama: findIdPelamar.Score.score_utama,
+                    created_by: findIdPelamar.username,
+                    created_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
+                    updated_by: findIdPelamar.username,
+                    updated_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
                   },
                 ],
               },
@@ -362,6 +504,19 @@ const applyLowongan = async (req, res, next) => {
             },
             {
               $set: {
+                updated_by: findIdPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+              },
+              $set: {
                 apllyLowonganPerusahaan: [
                   {
                     id_lowongan: findLowongan._id,
@@ -369,6 +524,28 @@ const applyLowongan = async (req, res, next) => {
                     namaPerusahaan: findLowongan.namaPerusahaan,
                     salary: findLowongan.salary,
                     status: "sudah melamar",
+                    created_by: findIdPelamar.username,
+                    created_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
+                    updated_by: findIdPelamar.username,
+                    updated_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
                   },
                 ],
               },
@@ -380,6 +557,19 @@ const applyLowongan = async (req, res, next) => {
               _id: ObjectId(findIdPelamar._id),
             },
             {
+              $set: {
+                updated_by: findIdPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+              },
               $push: {
                 apllyLowonganPerusahaan: {
                   $each: [
@@ -389,6 +579,28 @@ const applyLowongan = async (req, res, next) => {
                       namaPerusahaan: findLowongan.namaPerusahaan,
                       salary: findLowongan.salary,
                       status: "sudah melamar",
+                      created_by: findIdPelamar.username,
+                      created_at: new Date(
+                        Date.UTC(
+                          moment().get("year"),
+                          moment().get("month"),
+                          moment().get("date"),
+                          moment().get("hour"),
+                          moment().get("minute"),
+                          moment().get("second")
+                        )
+                      ),
+                      updated_by: findIdPelamar.username,
+                      updated_at: new Date(
+                        Date.UTC(
+                          moment().get("year"),
+                          moment().get("month"),
+                          moment().get("date"),
+                          moment().get("hour"),
+                          moment().get("minute"),
+                          moment().get("second")
+                        )
+                      ),
                     },
                   ],
                 },

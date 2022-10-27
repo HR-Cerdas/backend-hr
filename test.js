@@ -12,5 +12,9 @@
 //   )
 // );
 // console.log(utcDate);
-
-console.log(Math.floor(Math.random() * 90 + 10));
+// console.log(Math.floor(Math.random() * 90 + 10));
+const bcrypt = require("bcryptjs");
+const myPlaintextPassword =
+  "$2a$10$aZjF65Opa8nYVVfAXEJW3e/Pa2uJzUfhU3DL8j7MFjonGquLJhbSK";
+const salt = myPlaintextPassword.split("$")[3].substr(0, 22);
+console.log(salt);
