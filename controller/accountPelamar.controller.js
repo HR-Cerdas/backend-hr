@@ -137,7 +137,7 @@ const login = async (req, res, next) => {
       const token = signToken(payload);
       return res.status(200).json({
         data: token,
-        expired: 10000,
+        expired: 60000,
       });
     }
     // Check Password True & login End
