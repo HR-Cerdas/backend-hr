@@ -100,8 +100,8 @@ const register = async (req, res, next) => {
         food: Math.floor(Math.random() * 90 + 10),
         sport: Math.floor(Math.random() * 90 + 10),
         fashion: Math.floor(Math.random() * 90 + 10),
-        sentimen_positif: Math.floor(Math.random() * 100 + 20),
-        sentimen_negatif: Math.floor(100 - sentimen_positif),
+        sentimen_positif: Math.floor(Math.random() * 90 + 20),
+        sentimen_negatif: Math.floor(Math.random() * 90 + 20),
       },
     });
     // Register Input End
