@@ -18,7 +18,7 @@ const storageCv = multer.diskStorage({
 
 const uploadCv = multer({
   storage: storageCv,
-  limits: { fileSize: 1048576 }, // 10 Mb
+  limits: { fileSize: 10485760 }, // 10 Mb
   fileFilter: (req, file, cb) => {
     const validImageExtension = ["application/pdf", "application/x-pdf"];
     if (validImageExtension.includes(file.mimetype)) cb(null, true);

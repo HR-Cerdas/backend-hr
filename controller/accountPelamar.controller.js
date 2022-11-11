@@ -7,6 +7,7 @@ const client = new MongoClient(process.env.DATABASE_URL);
 const db = client.db("hr_cerdas");
 const { kirimEmail } = require("../helpers/email");
 const { signToken, checkPassword, tokenCheck } = require("../misc/auth");
+const moment = require("moment");
 
 const register = async (req, res, next) => {
   const {
@@ -106,7 +107,7 @@ const register = async (req, res, next) => {
     });
     // Register Input End
 
-    res.json({ status: "Created", msg: "Register Berhasil" });
+    res.status(200).json({ status: "Created", msg: "Register Berhasil" });
   } catch (e) {
     res.status(404).json({ msg: e });
   }

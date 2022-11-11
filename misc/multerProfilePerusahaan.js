@@ -2,9 +2,9 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 
 const storageFoto = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./assets/profilePerusahaan");
-  },
+  // destination: (req, file, cb) => {
+  //   cb(null, "./assets/profilePerusahaan");
+  // },
   filename: function (req, file, cb) {
     cb(
       null,
