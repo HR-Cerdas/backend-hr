@@ -8,10 +8,12 @@ const {
 
 const uploadPhoto = require("../misc/multerProfilePerusahaan");
 const uploadKtp = require("../misc/multerKtpDetailPerusahaan");
+const claudinary = require("../misc/claudinary");
 
 router.put(
   "/basic",
   uploadPhoto.single("fotoProfilPerusahaan"),
+  claudinary.profileHrUpload,
   editDetailBasicInfo
 );
 

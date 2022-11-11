@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require("fs");
 
 const moment = require("moment");
-require("mongodb-moment")(moment);
+
 
 // Get All Data Sesuai User Login
 const getDetailProfil = async (req, res, next) => {

@@ -13,8 +13,26 @@
 // );
 // console.log(utcDate);
 // console.log(Math.floor(Math.random() * 90 + 10));
-const bcrypt = require("bcryptjs");
-const myPlaintextPassword =
-  "$2a$10$aZjF65Opa8nYVVfAXEJW3e/Pa2uJzUfhU3DL8j7MFjonGquLJhbSK";
-const salt = myPlaintextPassword.split("$")[3].substr(0, 22);
-console.log(salt);
+
+// const cloudinary = require("cloudinary").v2;
+// require("dotenv").config();
+
+// cloudinary.config({
+//   cloud_name: process.env.cloud_name,
+//   api_key: +process.env.api_key,
+//   api_secret: process.env.api_secret,
+//   secure: true,
+// });
+
+// const deleteImage = async () => {
+//   return await cloudinary.uploader.destroy(
+//     `secondHand/pt/dabcp62jg3ufw2xusrqi`,
+//     result => result
+//   );
+// };
+// deleteImage();
+
+const a =
+  "https://res.cloudinary.com/ddrv8rknj/image/upload/v1667319901/secondHand/pt/au4mvfp6lyhm5z13adxq.png";
+const b = a.split("/");
+console.log(b[9]);

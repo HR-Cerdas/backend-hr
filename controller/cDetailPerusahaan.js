@@ -7,8 +7,17 @@ const fs = require("fs");
 
 const editDetailBasicInfo = async (req, res, next) => {
   const { username, id } = req.user;
-  const { industryCategory, Capacity, alamat, noPerusahaan, email, website, deskripsi } =
-    req.body;
+  const {
+    industryCategory,
+    Capacity,
+    alamat,
+    noPerusahaan,
+    email,
+    website,
+    deskripsi,
+    cloud_media_url,
+  } = req.body;
+  console.log(cloud_media_url);
   const fotoProfilPerusahaan = req.file;
   try {
     const findAccountHr = await db
@@ -21,10 +30,10 @@ const editDetailBasicInfo = async (req, res, next) => {
       });
     }
 
-    const profil = [];
-    const findlowonganHr = await db.collection("lowongan_pekerjaan").findOne({
-      id_hr: ObjectId(id),
-    });
+    // const profil = [];
+    // const findlowonganHr = await db.collection("lowongan_pekerjaan").findOne({
+    //   id_hr: ObjectId(id),
+    // });
 
     if (fotoProfilPerusahaan === undefined) {
       profil.push("");
@@ -43,7 +52,6 @@ const editDetailBasicInfo = async (req, res, next) => {
         );
       }
     }
-    console.log(profil);
 
     const editBasicDetail = await db.collection("profilehrs").updateOne(
       { _id: findAccountHr._id },
@@ -56,7 +64,7 @@ const editDetailBasicInfo = async (req, res, next) => {
             capacity: Capacity,
             email: email,
             website: website,
-            fotoperusahaan: profil[0],
+            fotoperusahaan: cloud_media_url,
             deskripsi: deskripsi,
           },
         },
@@ -75,7 +83,7 @@ const editDetailBasicInfo = async (req, res, next) => {
 
 const editDetailProfile = async (req, res, next) => {
   const { username } = req.user;
-  const {  DetailDescription } = req.body;
+  const { DetailDescription } = req.body;
   const ktp = req.files;
   const tdp = req.files;
   const siup = req.files;
