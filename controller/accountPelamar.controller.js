@@ -91,16 +91,16 @@ const register = async (req, res, next) => {
         )
       ),
       Score: {
-        score_utama: Math.floor(Math.random() * 90 + 10),
-        o: Math.floor(Math.random() * 90 + 10),
-        c: Math.floor(Math.random() * 90 + 10),
-        e: Math.floor(Math.random() * 90 + 10),
-        a: Math.floor(Math.random() * 90 + 10),
-        n: Math.floor(Math.random() * 90 + 10),
-        travel: Math.floor(Math.random() * 90 + 10),
-        food: Math.floor(Math.random() * 90 + 10),
-        sport: Math.floor(Math.random() * 90 + 10),
-        fashion: Math.floor(Math.random() * 90 + 10),
+        score_utama: Math.floor(Math.random() * 90 + 40),
+        o: Math.floor(Math.random() * 90 + 20),
+        c: Math.floor(Math.random() * 90 + 20),
+        e: Math.floor(Math.random() * 90 + 20),
+        a: Math.floor(Math.random() * 90 + 20),
+        n: Math.floor(Math.random() * 90 + 20),
+        travel: Math.floor(Math.random() * 90 + 20),
+        food: Math.floor(Math.random() * 90 + 20),
+        sport: Math.floor(Math.random() * 90 + 20),
+        fashion: Math.floor(Math.random() * 90 + 20),
         sentimen_positif: Math.floor(Math.random() * 90 + 20),
         sentimen_negatif: Math.floor(100 - sentimen_positif),
       },
@@ -138,7 +138,7 @@ const login = async (req, res, next) => {
       const token = signToken(payload);
       return res.status(200).json({
         data: token,
-        expired: 300000,
+        expired: 1200000,
       });
     }
     // Check Password True & login End
