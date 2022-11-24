@@ -966,12 +966,20 @@ const Searchlowongan = async (req, res, next) => {
   const { query } = req.body;
   try {
     const Query = query.toUpperCase();
+    // const cursor = await db
+    //   .collection("lowongan_pekerjaan")
+    //   .find({
+    //     $or: [{ key: { $regex: query } }],
+    //   })
+    //   .toArray();
     const cursor = await db
       .collection("lowongan_pekerjaan")
-      .find({
-        $or: [{ key: { $regex: Query } }],
-      })
+      .find({ $text: { $search: `\"${query}\"` } })
       .toArray();
+    // db.collection("lowongan_pekerjaan").createIndex({
+    //   position: "text",
+    //   namaPerusahaan: "text",
+    // });
     return res.status(200).json({
       data: cursor,
     });

@@ -32,7 +32,13 @@
 // };
 // deleteImage();
 
-const a =
-  "https://res.cloudinary.com/ddrv8rknj/image/upload/v1667319901/secondHand/pt/au4mvfp6lyhm5z13adxq.png";
-const b = a.split("/");
-console.log(b[9]);
+// const a =
+//   "https://res.cloudinary.com/ddrv8rknj/image/upload/v1667319901/secondHand/pt/au4mvfp6lyhm5z13adxq.png";
+// const b = a.split("/");
+// console.log(b[9]);
+require("dotenv").config();
+const { MongoClient, ObjectId, Db } = require("mongodb");
+const client = new MongoClient(process.env.DATABASE_URL);
+const db = client.db("hr_cerdas");
+
+db.collection("lowongan_pekerjaan").createIndex({ position: "text" });
