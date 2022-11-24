@@ -6,6 +6,8 @@ const path = require("path");
 const fs = require("fs");
 const moment = require("moment");
 
+const claudinary = require("../misc/claudinary");
+
 const createLowongan = async (req, res, next) => {
   const {
     position,
@@ -152,9 +154,10 @@ const getAllLowonganPagination = async (req, res, next) => {
 
 const applyLowongan = async (req, res, next) => {
   const { username } = req.user;
-  const { nomer, alasan } = req.body;
+  const { nomer, alasan, cloud_media_url } = req.body;
   const resume = req.file;
   const id = req.params.id;
+  console.log(cloud_media_url);
 
   try {
     const findIdPelamar = await db.collection("profilepelamar").findOne({
@@ -215,12 +218,11 @@ const applyLowongan = async (req, res, next) => {
         "Pelamar.id_pelamar": ObjectId(findIdPelamar._id),
       })
       .toArray();
-    // console.log(a);
+
     if (a[0] === undefined) {
       const cekResumeNama = [];
-      const cekResumePath = [];
 
-      if (findIdPelamar.pathCV === undefined) {
+      if (findIdPelamar.namaCV === undefined) {
         if (resume === undefined) {
           return res.status(400).json({
             status: "Bad Request",
@@ -231,13 +233,11 @@ const applyLowongan = async (req, res, next) => {
             { _id: ObjectId(findIdPelamar._id) },
             {
               $set: {
-                namaCV: resume.filename,
-                pathCV: resume.path,
+                namaCV: cloud_media_url,
               },
             }
           );
-          cekResumeNama.push(resume.filename);
-          cekResumePath.push(resume.path);
+          cekResumeNama.push(cloud_media_url);
         }
       } else {
         let filenameCv = path.basename(`../${findIdPelamar.pathCV}`);
@@ -255,11 +255,10 @@ const applyLowongan = async (req, res, next) => {
           //     message: "Anda Telah Apply di Lowongan ini",
           //   });
           // } else {
-          cekResumePath.push(findIdPelamar.pathCV);
-          cekResumeNama.push(filenameCv);
+          cekResumeNama.push(findIdPelamar.namaCV);
           // }
         } else {
-          if (resume.filename === filenameCv) {
+          if (cloud_media_url === findIdPelamar.namaCV) {
             // const a = await db
             //   .collection("lowongan_pekerjaan")
             //   .find({
@@ -273,20 +272,19 @@ const applyLowongan = async (req, res, next) => {
             //     message: "Anda Telah Apply di Lowongan ini",
             //   });
             // } else {
-            cekResumePath.push(findIdPelamar.pathCV);
-            cekResumeNama.push(filenameCv);
+            cekResumeNama.push(findIdPelamar.namaCV);
             // }
           } else {
-            const paths = `./assets/cv/${username}/${resume.filename}`;
-            fs.unlink(paths, err => {
-              if (err) console.log(err);
-              else {
-                console.log("\nDeleted file: example_file.txt");
-              }
-            });
+            // const paths = `./assets/cv/${username}/${resume.filename}`;
+            // fs.unlink(paths, err => {
+            //   if (err) console.log(err);
+            //   else {
+            //     console.log("\nDeleted file: example_file.txt");
+            //   }
+            // });
+            claudinary.deleteCV(cloud_media_url);
           }
-          cekResumePath.push(findIdPelamar.pathCV);
-          cekResumeNama.push(filenameCv);
+          cekResumeNama.push(findIdPelamar.namaCV);
         }
       }
 
@@ -318,7 +316,6 @@ const applyLowongan = async (req, res, next) => {
                   nomer: nomer,
                   alasan: alasan,
                   namaResume: cekResumeNama[0],
-                  pathResume: cekResumePath[0],
                   profile: findIdPelamar.img,
                   score_utama: findIdPelamar.Score.score_utama,
                   created_by: findIdPelamar.username,
@@ -490,7 +487,6 @@ const applyLowongan = async (req, res, next) => {
                     nomer: nomer,
                     alasan: alasan,
                     namaResume: cekResumeNama[0],
-                    pathResume: cekResumePath[0],
                     profile: findIdPelamar.img,
                     score_utama: findIdPelamar.Score.score_utama,
                     created_by: findIdPelamar.username,
@@ -638,19 +634,20 @@ const applyLowongan = async (req, res, next) => {
       }
     } else {
       if (resume !== undefined) {
-        const paths = `./assets/cv/${username}/${resume.filename}`;
-        fs.unlink(paths, err => {
-          if (err) console.log(err);
-          else {
-            console.log("\nDeleted file: example_file.txt");
-          }
-        });
+        // const paths = `./assets/cv/${username}/${resume.filename}`;
+        // fs.unlink(paths, err => {
+        //   if (err) console.log(err);
+        //   else {
+        //     console.log("\nDeleted file: example_file.txt");
+        //   }
+        // });
+        claudinary.deleteCV(cloud_media_url);
         return res.status(400).json({
-          msg: "Anda Telah Aplly Di Lowongan ini",
+          msg: "Anda Telah Aplly Di Lowongan iniss",
         });
       } else {
         return res.status(400).json({
-          msg: "Anda Telah Aplly Di Lowongan ini",
+          msg: "Anda Telah Aplly Di Lowongan inis",
         });
       }
     }
@@ -965,21 +962,17 @@ const getAllPelamarAllLowongan = async (req, res, next) => {
 const Searchlowongan = async (req, res, next) => {
   const { query } = req.body;
   try {
-    const Query = query.toUpperCase();
-    // const cursor = await db
-    //   .collection("lowongan_pekerjaan")
-    //   .find({
-    //     $or: [{ key: { $regex: query } }],
-    //   })
-    //   .toArray();
-    const cursor = await db
-      .collection("lowongan_pekerjaan")
-      .find({ $text: { $search: `\"${query}\"` } })
-      .toArray();
+    // Create Index Text
     // db.collection("lowongan_pekerjaan").createIndex({
     //   position: "text",
     //   namaPerusahaan: "text",
     // });
+
+    const cursor = await db
+      .collection("lowongan_pekerjaan")
+      .find({ $text: { $search: `\"${query}\"` } })
+      .toArray();
+
     return res.status(200).json({
       data: cursor,
     });

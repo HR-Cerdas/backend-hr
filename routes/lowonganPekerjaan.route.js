@@ -19,6 +19,7 @@ const {
 
 const authHeader = require("../misc/auth.header");
 const uploadCv = require("../misc/multerCV");
+const claudinary = require("../misc/claudinary");
 
 // Create Lowongan pekerjaan
 router.post("/create", authHeader, createLowongan);
@@ -30,6 +31,7 @@ router.put(
   "/applylowongan/id/:id",
   authHeader,
   uploadCv.single("resume"),
+  claudinary.uploudcv,
   applyLowongan
 );
 router.get("/listpelamar/id/:id", authHeader, getAllDataPelamarApply);

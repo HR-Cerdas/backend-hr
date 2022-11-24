@@ -14,31 +14,25 @@
 // console.log(utcDate);
 // console.log(Math.floor(Math.random() * 90 + 10));
 
-// const cloudinary = require("cloudinary").v2;
-// require("dotenv").config();
+const cloudinary = require("cloudinary").v2;
+require("dotenv").config();
 
-// cloudinary.config({
-//   cloud_name: process.env.cloud_name,
-//   api_key: +process.env.api_key,
-//   api_secret: process.env.api_secret,
-//   secure: true,
-// });
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: +process.env.api_key,
+  api_secret: process.env.api_secret,
+  secure: true,
+});
 
-// const deleteImage = async () => {
-//   return await cloudinary.uploader.destroy(
-//     `secondHand/pt/dabcp62jg3ufw2xusrqi`,
-//     result => result
-//   );
-// };
-// deleteImage();
+const deleteImage = async () => {
+  return await cloudinary.uploader.destroy(
+    `HrCerdas/CV/geo/ynxs2emev8fhchmfnmi9`,
+    result => result
+  );
+};
+deleteImage();
 
 // const a =
-//   "https://res.cloudinary.com/ddrv8rknj/image/upload/v1667319901/secondHand/pt/au4mvfp6lyhm5z13adxq.png";
-// const b = a.split("/");
-// console.log(b[9]);
-require("dotenv").config();
-const { MongoClient, ObjectId, Db } = require("mongodb");
-const client = new MongoClient(process.env.DATABASE_URL);
-const db = client.db("hr_cerdas");
-
-db.collection("lowongan_pekerjaan").createIndex({ position: "text" });
+//   "https://res.cloudinary.com/ddrv8rknj/image/upload/v1669307685/HrCerdas/CV/geo/jnfuhmqax04hlqmhvirc.pdf/";
+// const b = a.toString().split("/");
+// console.log(b);
