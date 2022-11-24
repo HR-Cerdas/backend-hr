@@ -5,14 +5,15 @@ const {
   getDetailProfil,
   editDetailProfil,
   updateAbout,
-  addWorkExperience,
-  addEducation,
   addSkill,
   addJobInterests,
   addResume,
   addSosialMedia,
   addOrganization,
 } = require("../controller/cDetailPelamar");
+const { addEducation } = require("../controller/Education");
+
+const { addWorkExperience } = require("../controller/Experience");
 
 const validationEditDetailPelamar = require("../validation/vDetailPelamar");
 const uploadCv = require("../misc/multerCV");

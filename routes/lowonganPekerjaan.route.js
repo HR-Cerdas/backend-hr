@@ -12,6 +12,7 @@ const {
   updateLowongan,
   sortLowongan,
   getAllPelamarAllLowongan,
+  getAllLowonganPagination,
 } = require("../controller/lowonganPekerjaan.controller");
 // Get Route End
 
@@ -21,6 +22,7 @@ const uploadCv = require("../misc/multerCV");
 // Create Lowongan pekerjaan
 router.post("/create", authHeader, createLowongan);
 router.get("/getall", getAllLowongan);
+router.get("/getLowongan", getAllLowonganPagination);
 router.get("/detaillowongan/id/:id", getDetailLowongan);
 router.put(
   "/applylowongan/id/:id",

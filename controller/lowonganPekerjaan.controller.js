@@ -126,6 +126,30 @@ const getAllLowongan = async (req, res, next) => {
   }
 };
 
+const getAllLowonganPagination = async (req, res, next) => {
+  const { page } = req.body;
+  const listPage = 5;
+  try {
+    const p = page || 0;
+    const data = [];
+    const getData = await db
+      .collection("lowongan_pekerjaan")
+      .find()
+      .sort({ position: 1 })
+      .skip(p * listPage)
+      .limit(listPage)
+      .forEach(ke => data.push(ke));
+
+    return res.status(200).json({
+      data: data,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: "Bad Request",
+    });
+  }
+};
+
 const applyLowongan = async (req, res, next) => {
   const { username } = req.user;
   const { nomer, alasan } = req.body;
@@ -949,4 +973,5 @@ module.exports = {
   updateLowongan,
   sortLowongan,
   getAllPelamarAllLowongan,
+  getAllLowonganPagination,
 };
