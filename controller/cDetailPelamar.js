@@ -7,7 +7,6 @@ const fs = require("fs");
 
 const moment = require("moment");
 
-
 // Get All Data Sesuai User Login
 const getDetailProfil = async (req, res, next) => {
   // ambil data req User
@@ -194,7 +193,7 @@ const addWorkExperience = async (req, res, next) => {
     if (endDate === "present") {
       dateEnd.push("present");
     } else {
-      dateEnd.push(moment.utc(endDate));
+      dateEnd.push(new Date(endDate));
     }
     // Condition field experience kosong atau tidak
     if (findAccountPelamar.workExperience === undefined) {
@@ -222,7 +221,7 @@ const addWorkExperience = async (req, res, next) => {
                 id_Experience: ObjectId(),
                 jobPosition: jobPosition,
                 company: company,
-                startDate: moment.utc(startDate),
+                startDate: new Date(startDate),
                 endDate: dateEnd[0],
                 created_by: findAccountPelamar.username,
                 created_at: new Date(
@@ -277,7 +276,7 @@ const addWorkExperience = async (req, res, next) => {
                   id_Experience: ObjectId(),
                   jobPosition: jobPosition,
                   company: company,
-                  startDate: moment.utc(startDate),
+                  startDate: new Date(startDate),
                   endDate: dateEnd[0],
                   created_by: findAccountPelamar.username,
                   created_at: new Date(
