@@ -128,7 +128,7 @@ const getAllLowongan = async (req, res, next) => {
 
 const getAllLowonganPagination = async (req, res, next) => {
   const { page } = req.body;
-  const listPage = 5;
+  const listPage = 25;
   try {
     const p = page || 0;
     const data = [];
