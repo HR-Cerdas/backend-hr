@@ -962,6 +962,26 @@ const getAllPelamarAllLowongan = async (req, res, next) => {
   }
 };
 
+const Searchlowongan = async (req, res, next) => {
+  const { query } = req.body;
+  try {
+    const Query = query.toUpperCase();
+    const cursor = await db
+      .collection("lowongan_pekerjaan")
+      .find({
+        $or: [{ key: { $regex: Query } }],
+      })
+      .toArray();
+    return res.status(200).json({
+      data: cursor,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+
 module.exports = {
   createLowongan,
   getAllLowongan,
@@ -974,4 +994,5 @@ module.exports = {
   sortLowongan,
   getAllPelamarAllLowongan,
   getAllLowonganPagination,
+  Searchlowongan,
 };
