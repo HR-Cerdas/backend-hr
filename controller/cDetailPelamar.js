@@ -72,7 +72,7 @@ const editDetailProfil = async (req, res, next) => {
           noHp: noHp,
           DetailProfil: {
             location: location,
-            tanggalLahir: moment.utc(tanggalLahir),
+            tanggalLahir: new Date(tanggalLahir),
             gender: genderr[0],
             residentialStatus: residentialStatus,
             nationality: nationality,
