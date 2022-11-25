@@ -25,6 +25,7 @@ const addWorkExperience = async (req, res, next) => {
       });
     // Condition field end Date Tidak di isi
     const dateEnd = [];
+    console.log(dateEnd);
     if (endDate === "present") {
       dateEnd.push("present");
     } else {

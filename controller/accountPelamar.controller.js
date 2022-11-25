@@ -20,6 +20,8 @@ const register = async (req, res, next) => {
     username,
   } = req.body;
 
+  const sentimen_positif = Math.floor(Math.random() * 90 + 20);
+
   try {
     // Check Email Ready Start
     const findEmail = await db
@@ -101,7 +103,7 @@ const register = async (req, res, next) => {
         food: Math.floor(Math.random() * 90 + 20),
         sport: Math.floor(Math.random() * 90 + 20),
         fashion: Math.floor(Math.random() * 90 + 20),
-        sentimen_positif: Math.floor(Math.random() * 90 + 20),
+        sentimen_positif: sentimen_positif,
         sentimen_negatif: Math.floor(100 - sentimen_positif),
       },
     });
