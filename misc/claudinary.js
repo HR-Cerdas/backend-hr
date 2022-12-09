@@ -39,9 +39,10 @@ const deleteImageProfile = async img_url => {
 const uploudcv = async (req, res, next) => {
   const response = new Response(res);
   const { username } = req.user;
+  const id = req.params.id;
   try {
     if (req.file) {
-      const foldering = `HrCerdas/CV/${username}/`;
+      const foldering = `HrCerdas/CV_Aplly/${id}/${username}/`;
       const uploadedMedia = await cloudinary.uploader.upload(req.file.path, {
         folder: foldering,
       });
@@ -53,14 +54,58 @@ const uploudcv = async (req, res, next) => {
   }
 };
 
+const uploudcvCadangan = async (req, res, next) => {
+  const response = new Response(res);
+  const { username } = req.user;
+  const id = req.params.id;
+  try {
+    if (req.file) {
+      const foldering = `HrCerdas/CV_Aplly/${id}/${username}/`;
+      const uploadedMedia = await cloudinary.uploader.upload(req.file.path, {
+        folder: foldering,
+      });
+      req.body.cloud_media_url = uploadedMedia.secure_url;
+    }
+    next();
+  } catch (error) {
+    return response.Fail(error.http_code, error, error.message);
+  }
+};
+
+const uploudcvPelamar = async value => {
+  const response = new Response(res);
+  try {
+    if (value[0]) {
+      const folderCVPelamar = `HrCerdas/CV/${value[1]}/`;
+      const uploadedMediaPelamar = await cloudinary.uploader.upload(
+        req.file.path,
+        {
+          folder: folderCVPelamar,
+        }
+      );
+      req.body.cloud_media_url_CVpelamar = uploadedMediaPelamar.secure_url;
+    }
+    next();
+  } catch (error) {
+    return response.Fail(error.http_code, error, error.message);
+  }
+};
+
 const deleteCV = async img_url => {
   const img_id = img_url.split("/");
-  const file = img_id[10].split(".");
+  const file = img_id[11].split(".");
   return await cloudinary.uploader.destroy(
-    `HrCerdas/CV/${img_id[9]}/${file[0]}`,
+    `HrCerdas/CV_Aplly/${img_id[9]}/${img_id[10]}/${file[0]}`,
     result => result
   );
 };
 // CRUD CV End
 
-module.exports = { profileHrUpload, deleteImageProfile, uploudcv, deleteCV };
+module.exports = {
+  profileHrUpload,
+  deleteImageProfile,
+  uploudcv,
+  deleteCV,
+  uploudcvPelamar,
+  uploudcvCadangan,
+};

@@ -198,17 +198,8 @@ const applyLowongan = async (req, res, next) => {
       );
     }
 
-    // if (findLowongan.Pelamar !== undefined) {
-    //   findLowongan.Pelamar.map(e => {
-    //     if (e.id_pelamar.toString() === findIdPelamar._id.toString()) {
-    //       return res.status(400).json({
-    //         message: "Anda Telah Apply di Lowongan ini",
-    //       });
-    //     } else {
-    //       console.log("geo kontol");
-    //     }
-    //   });
-    // }
+    // value untuk kirim data claudinary pelamar
+    const value = [resume, username];
 
     // Query A untuk mencari apakah terdapat pelamar dalam lowongan yang ingin di aplly
     const a = await db
@@ -229,11 +220,13 @@ const applyLowongan = async (req, res, next) => {
             message: "Harus Menambahkan CV",
           });
         } else {
+          claudinary.uploudcvPelamar(value);
+          const { cloud_media_url_CVpelamar } = req.body;
           await db.collection("profilepelamar").updateOne(
             { _id: ObjectId(findIdPelamar._id) },
             {
               $set: {
-                namaCV: cloud_media_url,
+                namaCV: cloud_media_url_CVpelamar,
               },
             }
           );
