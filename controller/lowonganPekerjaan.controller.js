@@ -976,6 +976,105 @@ const Searchlowongan = async (req, res, next) => {
   }
 };
 
+const apllyLowonganV2 = async (req, res, next) => {
+  const { username } = req.user;
+  const id = req.params.id;
+  const { nomer, alasan } = req.body;
+  try {
+    const findAccountPelamar = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findAccountPelamar)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+
+    const findLowongan = await db.collection("lowongan_pekerjaan").findOne({
+      _id: ObjectId(id),
+    });
+    if (!findLowongan)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data lowongan tidak ditemukan",
+      });
+    if (findAccountPelamar.DetailProfil.location === "") {
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data lowongan tidak ditemukan",
+      });
+    }
+
+    const name =
+      findAccountPelamar.name.first_name + findAccountPelamar.name.last_name;
+
+    if (findLowongan.Pelamar === undefined) {
+      await db.collection("lowongan_pekerjaan").updateOne(
+        { _id: ObjectId(findLowongan._id) },
+        {
+          $set: {
+            updated_by: findAccountPelamar.username,
+            updated_at: new Date(
+              Date.UTC(
+                moment().get("year"),
+                moment().get("month"),
+                moment().get("date"),
+                moment().get("hour"),
+                moment().get("minute"),
+                moment().get("second")
+              )
+            ),
+          },
+          $set: {
+            Pelamar: [
+              {
+                id: ObjectId(),
+                id_pelamar: findAccountPelamar._id,
+                name: name,
+                nomer: nomer,
+                alasan: alasan,
+                profile: findIdPelamar.img,
+                score_utama: findIdPelamar.Score.score_utama,
+                created_by: findIdPelamar.username,
+                created_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+                updated_by: findIdPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+              },
+            ],
+          },
+        }
+      );
+    } else {
+    }
+    return res.status(200).json({
+      status: "Success",
+      msg: findAccountPelamar,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+
 module.exports = {
   createLowongan,
   getAllLowongan,
@@ -989,4 +1088,5 @@ module.exports = {
   getAllPelamarAllLowongan,
   getAllLowonganPagination,
   Searchlowongan,
+  apllyLowonganV2,
 };

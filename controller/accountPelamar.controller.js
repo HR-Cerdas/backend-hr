@@ -28,11 +28,10 @@ const register = async (req, res, next) => {
       .collection("profilepelamar")
       .findOne({ email: email });
     if (findEmail)
-      throw {
+      return res.status(400).json({
         message: "Email telah digunakan",
         status: "Bad Request",
-        code: 400,
-      };
+      });
     // Check Email Ready End
 
     // Check Email Ready Start
@@ -40,20 +39,18 @@ const register = async (req, res, next) => {
       .collection("profilepelamar")
       .findOne({ username: username });
     if (findUsername)
-      throw {
+      return res.status(400).json({
         message: "Username telah digunakan",
         status: "Bad Request",
-        code: 400,
-      };
+      });
     // Check Email Ready End
 
     // Check Password Confirm Start
     if (password !== confPassword)
-      throw {
+      return res.status(400).json({
         message: "Password Tidak Cocok",
         status: "Bad Request",
-        code: 400,
-      };
+      });
     // Check Password Confirm End
 
     // Create hash Password Start
@@ -111,7 +108,7 @@ const register = async (req, res, next) => {
 
     res.status(200).json({ status: "Created", msg: "Register Berhasil" });
   } catch (e) {
-    res.status(404).json({ msg: e });
+    res.status(404).json({ msg: "Bad Request" });
   }
 };
 

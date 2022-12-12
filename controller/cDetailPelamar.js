@@ -42,8 +42,7 @@ const editDetailProfil = async (req, res, next) => {
     noHp,
     email,
   } = req.body;
-  console.log(tanggalLahir);
-  console.log(location);
+
   try {
     // Cari Document Account sesuai Login Start
     const findAccountPelamar = await db.collection("profilepelamar").findOne({
