@@ -981,6 +981,7 @@ const apllyLowonganV2 = async (req, res, next) => {
   const id = req.params.id;
   const { nomer, alasan } = req.body;
   try {
+    // Find Account Pelamar
     const findAccountPelamar = await db.collection("profilepelamar").findOne({
       username: username,
     });
@@ -990,6 +991,7 @@ const apllyLowonganV2 = async (req, res, next) => {
         message: "data pelamar tidak ditemukan",
       });
 
+    // Find Lowongan
     const findLowongan = await db.collection("lowongan_pekerjaan").findOne({
       _id: ObjectId(id),
     });
@@ -998,55 +1000,137 @@ const apllyLowonganV2 = async (req, res, next) => {
         status: "Bad Request",
         message: "data lowongan tidak ditemukan",
       });
+
+    // Validation
     if (findAccountPelamar.DetailProfil.location === "") {
       return res.status(400).json({
         status: "Bad Request",
-        message: "data lowongan tidak ditemukan",
+        message: "data location harap di isi",
       });
+    }
+    if (findAccountPelamar.DetailProfil.tanggalLahir === "") {
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data tanggal lahir harap di isi",
+      });
+    }
+    if (findAccountPelamar.DetailProfil.residentialStatus === "") {
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data residential status harap di isi",
+      });
+    }
+    if (findAccountPelamar.DetailProfil.nationality === "") {
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data nationality harap di isi",
+      });
+    }
+    if (findAccountPelamar.workExperience === undefined) {
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data workexperience harap di isi",
+      });
+    }
+    if (findAccountPelamar.addEducation === undefined) {
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data addEducation harap di isi",
+      });
+    }
+    if (findAccountPelamar.skills === undefined) {
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data skills harap di isi",
+      });
+    }
+    if (!findAccountPelamar.addorganization === undefined) {
+      console.log("kontol geo");
     }
 
     const name =
       findAccountPelamar.name.first_name + findAccountPelamar.name.last_name;
 
-    if (findLowongan.Pelamar === undefined) {
-      await db.collection("lowongan_pekerjaan").updateOne(
-        { _id: ObjectId(findLowongan._id) },
-        {
-          $set: {
-            updated_by: findAccountPelamar.username,
-            updated_at: new Date(
-              Date.UTC(
-                moment().get("year"),
-                moment().get("month"),
-                moment().get("date"),
-                moment().get("hour"),
-                moment().get("minute"),
-                moment().get("second")
-              )
-            ),
-          },
-          $set: {
-            Pelamar: [
-              {
-                id: ObjectId(),
-                id_pelamar: findAccountPelamar._id,
-                name: name,
-                nomer: nomer,
-                alasan: alasan,
-                profile: findIdPelamar.img,
-                score_utama: findIdPelamar.Score.score_utama,
-                created_by: findIdPelamar.username,
-                created_at: new Date(
-                  Date.UTC(
-                    moment().get("year"),
-                    moment().get("month"),
-                    moment().get("date"),
-                    moment().get("hour"),
-                    moment().get("minute"),
-                    moment().get("second")
-                  )
-                ),
-                updated_by: findIdPelamar.username,
+    const a = await db
+      .collection("lowongan_pekerjaan")
+      .find({
+        _id: ObjectId(id),
+        "Pelamar.id_pelamar": ObjectId(findAccountPelamar._id),
+      })
+      .toArray();
+    console.log(a[0]);
+
+    if (a[0] === undefined) {
+      if (findLowongan.Pelamar === undefined) {
+        await db.collection("lowongan_pekerjaan").updateOne(
+          { _id: ObjectId(findLowongan._id) },
+          {
+            $set: {
+              updated_by: findAccountPelamar.username,
+              updated_at: new Date(
+                Date.UTC(
+                  moment().get("year"),
+                  moment().get("month"),
+                  moment().get("date"),
+                  moment().get("hour"),
+                  moment().get("minute"),
+                  moment().get("second")
+                )
+              ),
+            },
+            $set: {
+              Pelamar: [
+                {
+                  id: ObjectId(),
+                  id_pelamar: findAccountPelamar._id,
+                  name: name,
+                  nomer: nomer,
+                  alasan: alasan,
+                  profile: findAccountPelamar.img,
+                  score_utama: findAccountPelamar.Score.score_utama,
+                  location: findAccountPelamar.DetailProfil.location,
+                  tangglLahir: findAccountPelamar.DetailProfil.tanggalLahir,
+                  residentialStatus:
+                    findAccountPelamar.DetailProfil.residentialStatus,
+                  nationality: findAccountPelamar.DetailProfil.nationality,
+                  workExperience: findAccountPelamar.workExperience,
+                  addEducation: findAccountPelamar.addEducation,
+                  skills: findAccountPelamar.skills,
+                  created_by: findAccountPelamar.username,
+                  created_at: new Date(
+                    Date.UTC(
+                      moment().get("year"),
+                      moment().get("month"),
+                      moment().get("date"),
+                      moment().get("hour"),
+                      moment().get("minute"),
+                      moment().get("second")
+                    )
+                  ),
+                  updated_by: findAccountPelamar.username,
+                  updated_at: new Date(
+                    Date.UTC(
+                      moment().get("year"),
+                      moment().get("month"),
+                      moment().get("date"),
+                      moment().get("hour"),
+                      moment().get("minute"),
+                      moment().get("second")
+                    )
+                  ),
+                },
+              ],
+            },
+          }
+        );
+        if (findAccountPelamar.apllyLowonganPerusahaan === undefined) {
+          await db.collection("profilepelamar").updateOne(
+            {
+              _id: ObjectId(findAccountPelamar._id),
+            },
+            {
+              $set: {
+                updated_by: findAccountPelamar.username,
                 updated_at: new Date(
                   Date.UTC(
                     moment().get("year"),
@@ -1058,16 +1142,282 @@ const apllyLowonganV2 = async (req, res, next) => {
                   )
                 ),
               },
-            ],
-          },
+              $set: {
+                apllyLowonganPerusahaan: [
+                  {
+                    id_lowongan: findLowongan._id,
+                    position: findLowongan.position,
+                    namaPerusahaan: findLowongan.namaPerusahaan,
+                    salary: findLowongan.salary,
+                    status: "sudah melamar",
+                    created_by: findAccountPelamar.username,
+                    created_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
+                    updated_by: findAccountPelamar.username,
+                    updated_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
+                  },
+                ],
+              },
+            }
+          );
+        } else {
+          await db.collection("profilepelamar").updateOne(
+            {
+              _id: ObjectId(findAccountPelamar._id),
+            },
+            {
+              $set: {
+                updated_by: findAccountPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+              },
+              $push: {
+                apllyLowonganPerusahaan: {
+                  $each: [
+                    {
+                      id_lowongan: findLowongan._id,
+                      position: findLowongan.position,
+                      namaPerusahaan: findLowongan.namaPerusahaan,
+                      salary: findLowongan.salary,
+                      status: "sudah melamar",
+                      created_by: findAccountPelamar.username,
+                      created_at: new Date(
+                        Date.UTC(
+                          moment().get("year"),
+                          moment().get("month"),
+                          moment().get("date"),
+                          moment().get("hour"),
+                          moment().get("minute"),
+                          moment().get("second")
+                        )
+                      ),
+                      updated_by: findAccountPelamar.username,
+                      updated_at: new Date(
+                        Date.UTC(
+                          moment().get("year"),
+                          moment().get("month"),
+                          moment().get("date"),
+                          moment().get("hour"),
+                          moment().get("minute"),
+                          moment().get("second")
+                        )
+                      ),
+                    },
+                  ],
+                },
+              },
+            }
+          );
         }
-      );
+      } else {
+        await db.collection("lowongan_pekerjaan").updateOne(
+          { _id: ObjectId(findLowongan._id) },
+          {
+            $set: {
+              updated_by: findAccountPelamar.username,
+              updated_at: new Date(
+                Date.UTC(
+                  moment().get("year"),
+                  moment().get("month"),
+                  moment().get("date"),
+                  moment().get("hour"),
+                  moment().get("minute"),
+                  moment().get("second")
+                )
+              ),
+            },
+            $push: {
+              Pelamar: {
+                $each: [
+                  {
+                    id: ObjectId(),
+                    id_pelamar: findAccountPelamar._id,
+                    name: name,
+                    nomer: nomer,
+                    alasan: alasan,
+                    profile: findAccountPelamar.img,
+                    score_utama: findAccountPelamar.Score.score_utama,
+                    location: findAccountPelamar.DetailProfil.location,
+                    tangglLahir: findAccountPelamar.DetailProfil.tanggalLahir,
+                    residentialStatus:
+                      findAccountPelamar.DetailProfil.residentialStatus,
+                    nationality: findAccountPelamar.DetailProfil.nationality,
+                    workExperience: findAccountPelamar.workExperience,
+                    addEducation: findAccountPelamar.addEducation,
+                    skills: findAccountPelamar.skills,
+                    created_by: findAccountPelamar.username,
+                    created_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
+                    updated_by: findAccountPelamar.username,
+                    updated_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
+                  },
+                ],
+              },
+            },
+          }
+        );
+        if (findAccountPelamar.apllyLowonganPerusahaan === undefined) {
+          await db.collection("profilepelamar").updateOne(
+            {
+              _id: ObjectId(findAccountPelamar._id),
+            },
+            {
+              $set: {
+                updated_by: findAccountPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+              },
+              $set: {
+                apllyLowonganPerusahaan: [
+                  {
+                    id_lowongan: findLowongan._id,
+                    position: findLowongan.position,
+                    namaPerusahaan: findLowongan.namaPerusahaan,
+                    salary: findLowongan.salary,
+                    status: "sudah melamar",
+                    created_by: findAccountPelamar.username,
+                    created_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
+                    updated_by: findAccountPelamar.username,
+                    updated_at: new Date(
+                      Date.UTC(
+                        moment().get("year"),
+                        moment().get("month"),
+                        moment().get("date"),
+                        moment().get("hour"),
+                        moment().get("minute"),
+                        moment().get("second")
+                      )
+                    ),
+                  },
+                ],
+              },
+            }
+          );
+        } else {
+          await db.collection("profilepelamar").updateOne(
+            {
+              _id: ObjectId(findAccountPelamar._id),
+            },
+            {
+              $set: {
+                updated_by: findAccountPelamar.username,
+                updated_at: new Date(
+                  Date.UTC(
+                    moment().get("year"),
+                    moment().get("month"),
+                    moment().get("date"),
+                    moment().get("hour"),
+                    moment().get("minute"),
+                    moment().get("second")
+                  )
+                ),
+              },
+              $push: {
+                apllyLowonganPerusahaan: {
+                  $each: [
+                    {
+                      id_lowongan: findLowongan._id,
+                      position: findLowongan.position,
+                      namaPerusahaan: findLowongan.namaPerusahaan,
+                      salary: findLowongan.salary,
+                      status: "sudah melamar",
+                      created_by: findAccountPelamar.username,
+                      created_at: new Date(
+                        Date.UTC(
+                          moment().get("year"),
+                          moment().get("month"),
+                          moment().get("date"),
+                          moment().get("hour"),
+                          moment().get("minute"),
+                          moment().get("second")
+                        )
+                      ),
+                      updated_by: findAccountPelamar.username,
+                      updated_at: new Date(
+                        Date.UTC(
+                          moment().get("year"),
+                          moment().get("month"),
+                          moment().get("date"),
+                          moment().get("hour"),
+                          moment().get("minute"),
+                          moment().get("second")
+                        )
+                      ),
+                    },
+                  ],
+                },
+              },
+            }
+          );
+        }
+        return res.status(200).json({
+          msg: `berhasil melamar dissss`,
+        });
+      }
     } else {
+      return res.status(400).json({
+        msg: "Anda Telah Aplly Di Lowongan inis",
+      });
     }
-    return res.status(200).json({
-      status: "Success",
-      msg: findAccountPelamar,
-    });
   } catch (error) {
     return res.status(404).json({
       status: "Bad Request",

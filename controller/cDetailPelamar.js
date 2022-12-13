@@ -64,6 +64,13 @@ const editDetailProfil = async (req, res, next) => {
     }
     // Validation Bollean Gender End
 
+    let tanggal = [];
+    if (tanggalLahir === "") {
+      tanggal.push("");
+    } else {
+      tanggal.push(new Date(tanggalLahir));
+    }
+
     // Edit Data pada 1 Document Start
     const updateDetailPelamar = await db.collection("profilepelamar").updateOne(
       { _id: ObjectId(id) },
@@ -73,7 +80,7 @@ const editDetailProfil = async (req, res, next) => {
           noHp: noHp,
           DetailProfil: {
             location: location,
-            tanggalLahir: new Date(tanggalLahir),
+            tanggalLahir: tanggal[0],
             gender: genderr[0],
             residentialStatus: residentialStatus,
             nationality: nationality,
