@@ -1032,6 +1032,12 @@ const apllyLowonganV2 = async (req, res, next) => {
         message: "data nationality harap di isi",
       });
     }
+    if (findAccountPelamar.aboutme === undefined) {
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data aboutme harap di isi",
+      });
+    }
     if (findAccountPelamar.workExperience === undefined) {
       return res.status(400).json({
         status: "Bad Request",
@@ -1092,6 +1098,7 @@ const apllyLowonganV2 = async (req, res, next) => {
                   name: name,
                   nomer: nomer,
                   alasan: alasan,
+                  aboutme: findAccountPelamar.aboutme,
                   profile: findAccountPelamar.img,
                   score_utama: findAccountPelamar.Score.score_utama,
                   location: findAccountPelamar.DetailProfil.location,
@@ -1266,6 +1273,7 @@ const apllyLowonganV2 = async (req, res, next) => {
                     name: name,
                     nomer: nomer,
                     alasan: alasan,
+                    aboutme: findAccountPelamar.aboutme,
                     profile: findAccountPelamar.img,
                     score_utama: findAccountPelamar.Score.score_utama,
                     location: findAccountPelamar.DetailProfil.location,
