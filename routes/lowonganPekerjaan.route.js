@@ -41,6 +41,6 @@ router.delete("/deletelowongan/id/:id", authHeader, deleteLowongan);
 router.put("/update/id/:id", authHeader, updateLowongan);
 router.post("/getdetailpelamar", authHeader, sortLowongan);
 router.get("/allpelamarapllylowongan", authHeader, getAllPelamarAllLowongan);
-router.put("/aplly/id/:id", authHeader, apllyLowonganV2);
+router.put("/apply/:id", authHeader, apllyLowonganV2);
 
 module.exports = router;

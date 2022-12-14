@@ -9,10 +9,9 @@ const {
   addJobInterests,
   addResume,
   addSosialMedia,
-  addOrganization,
 } = require("../controller/cDetailPelamar");
 const { addEducation } = require("../controller/Education");
-
+const { addOrganization } = require("../controller/Organization");
 const { addWorkExperience } = require("../controller/Experience");
 
 const validationEditDetailPelamar = require("../validation/vDetailPelamar");
