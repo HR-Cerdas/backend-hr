@@ -1159,6 +1159,7 @@ const apllyLowonganV2 = async (req, res, next) => {
                 apllyLowonganPerusahaan: [
                   {
                     id_lowongan: findLowongan._id,
+                    alasan: alasan,
                     position: findLowongan.position,
                     namaPerusahaan: findLowongan.namaPerusahaan,
                     salary: findLowongan.salary,
@@ -1214,6 +1215,7 @@ const apllyLowonganV2 = async (req, res, next) => {
                   $each: [
                     {
                       id_lowongan: findLowongan._id,
+                      alasan: alasan,
                       position: findLowongan.position,
                       namaPerusahaan: findLowongan.namaPerusahaan,
                       salary: findLowongan.salary,
@@ -1335,6 +1337,7 @@ const apllyLowonganV2 = async (req, res, next) => {
                 apllyLowonganPerusahaan: [
                   {
                     id_lowongan: findLowongan._id,
+                    alasan: alasan,
                     position: findLowongan.position,
                     namaPerusahaan: findLowongan.namaPerusahaan,
                     salary: findLowongan.salary,
@@ -1390,6 +1393,7 @@ const apllyLowonganV2 = async (req, res, next) => {
                   $each: [
                     {
                       id_lowongan: findLowongan._id,
+                      alasan: alasan,
                       position: findLowongan.position,
                       namaPerusahaan: findLowongan.namaPerusahaan,
                       salary: findLowongan.salary,
@@ -1424,12 +1428,12 @@ const apllyLowonganV2 = async (req, res, next) => {
           );
         }
         return res.status(200).json({
-          msg: `berhasil melamar dissss`,
+          message: `berhasil melamar dissss`,
         });
       }
     } else {
       return res.status(400).json({
-        msg: "Anda Telah Aplly Di Lowongan inis",
+        message: "Anda Telah Aplly Di Lowongan inis",
       });
     }
   } catch (error) {

@@ -298,9 +298,29 @@ const getprofilid = async (req, res) => {
   const { id } = req.user;
   try {
     // Find Account Pelamar
-    const findhr = await db.collection("profilepelamar").findOne({
-      _id: ObjectId(id),
-    });
+    const findhr = await db.collection("profilepelamar").aggregate([
+      { $match: { " _id": ObjectId(id) } },
+      // {
+      //   $unwind: {
+      //     path: "$addorganization",
+      //     includeArrayIndex: "arrayIndex",
+      //   },
+      // },
+      // {
+      //   $lookup: {
+      //     from: "organization_pelamar",
+      //     localField: "addorganization.id_Organization",
+      //     foreignField: "_id",
+      //     // as: "orderdetails",
+      //   },
+      // },
+      // {
+      //   $project: {
+      //     _id: 1,
+      //     // "name.first_name": 1,
+      //   },
+      // },
+    ]);
     // Tidak Menemukan Pelamar
     if (!findhr)
       return res.status(400).json({
