@@ -11,7 +11,12 @@ const {
   addSosialMedia,
 } = require("../controller/cDetailPelamar");
 const { addEducation } = require("../controller/Education");
-const { addOrganization } = require("../controller/Organization");
+// organization
+const {
+  addOrganization,
+  editOrganization,
+} = require("../controller/Organization");
+// experience
 const { addWorkExperience } = require("../controller/Experience");
 
 const validationEditDetailPelamar = require("../validation/vDetailPelamar");
@@ -28,6 +33,8 @@ router.put("/addskill", addSkill);
 router.put("/addjob", addJobInterests);
 router.put("/addresume", uploadCv.single("cv"), addResume);
 router.put("/addsosialmedia", addSosialMedia);
-router.put("/addorganization", addOrganization);
+
+router.post("/addorganization", addOrganization);
+router.put("/updateorganization/id/:id", editOrganization);
 
 module.exports = router;

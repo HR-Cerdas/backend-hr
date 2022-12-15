@@ -27,8 +27,8 @@ const addOrganization = async (req, res, next) => {
       _id: idd,
       organizationName: organizationName,
       Role: Role,
-      startDate: moment.utc(startDate),
-      endDate: moment.utc(endDate),
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
       created_by: findAccountPelamar.username,
       created_at: new Date(
         Date.UTC(
@@ -73,7 +73,7 @@ const addOrganization = async (req, res, next) => {
           $set: {
             addorganization: [
               {
-                id_Organization: idd,
+                id: idd,
               },
             ],
           },
@@ -100,7 +100,7 @@ const addOrganization = async (req, res, next) => {
             addorganization: {
               $each: [
                 {
-                  id_Organization: idd,
+                  id: idd,
                 },
               ],
             },
@@ -109,7 +109,69 @@ const addOrganization = async (req, res, next) => {
       );
     }
     return res.status(200).json({
-      msg: "berhasil Update Education",
+      message: "berhasil Update Education",
+    });
+  } catch (error) {
+    return res.status(404).json({
+      status: "Bad Request",
+    });
+  }
+};
+
+const editOrganization = async (req, res, next) => {
+  const id = req.params.id;
+  const { username } = req.user;
+  const { organizationName, role, startDate, endDate } = req.body;
+  console.log(endDate);
+  console.log(startDate);
+
+  try {
+    const findAccountPelamar = await db.collection("profilepelamar").findOne({
+      username: username,
+    });
+    if (!findAccountPelamar)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data pelamar tidak ditemukan",
+      });
+
+    const findDataOrganization = await db
+      .collection("organization_pelamar")
+      .findOne({
+        _id: ObjectId(id),
+      });
+    if (!findDataOrganization)
+      return res.status(400).json({
+        status: "Bad Request",
+        message: "data organization tidak ditemukan",
+      });
+
+    await db.collection("organization_pelamar").updateOne(
+      {
+        _id: ObjectId(id),
+      },
+      {
+        $set: {
+          organizationName: organizationName,
+          Role: role,
+          startDate: new Date(startDate),
+          endDate: new Date(endDate),
+          updated_by: username,
+          updated_at: new Date(
+            Date.UTC(
+              moment().get("year"),
+              moment().get("month"),
+              moment().get("date"),
+              moment().get("hour"),
+              moment().get("minute"),
+              moment().get("second")
+            )
+          ),
+        },
+      }
+    );
+    return res.status(200).json({
+      message: "berhasil Update Organization",
     });
   } catch (error) {
     return res.status(404).json({
@@ -120,4 +182,5 @@ const addOrganization = async (req, res, next) => {
 
 module.exports = {
   addOrganization,
+  editOrganization,
 };
