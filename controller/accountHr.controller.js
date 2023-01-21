@@ -8,11 +8,15 @@ const {
   Timestamp,
   ServerApiVersion,
 } = require("mongodb");
-const client = new MongoClient(process.env.DATABASE_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: ServerApiVersion.v1,
-});
+const client = new MongoClient(
+  process.env.DATABASE_URL,
+  {
+    useNewUrlParser: true,
+  },
+  { useUnifiedTopology: true },
+  { connectTimeoutMS: 30000 },
+  { keepAlive: 1 }
+);
 const db = client.db("hr_cerdas");
 const { kirimEmail } = require("../helpers/email");
 const { signToken, checkPassword, tokenCheck } = require("../misc/auth");
@@ -101,7 +105,7 @@ const register = async (req, res, next) => {
     });
     // Register Input End
 
-    res.status(200).json({ status: "Created", msg: "Register Berhasil" });
+    res.status(200).json({ msg: "Register Berhasil" });
   } catch (e) {
     res.status(404).json({ msg: e });
   }
