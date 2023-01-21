@@ -8,15 +8,10 @@ const {
   Timestamp,
   ServerApiVersion,
 } = require("mongodb");
-const client = new MongoClient(
-  process.env.DATABASE_URL,
-  {
-    useNewUrlParser: true,
-  },
-  { useUnifiedTopology: true },
-  { connectTimeoutMS: 30000 },
-  { keepAlive: 1 }
-);
+const client = new MongoClient(process.env.DATABASE_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const db = client.db("hr_cerdas");
 const { kirimEmail } = require("../helpers/email");
 const { signToken, checkPassword, tokenCheck } = require("../misc/auth");
