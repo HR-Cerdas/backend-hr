@@ -6,7 +6,6 @@ const { MongoClient, ObjectId } = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL, {
   useUnifiedTopology: true,
 });
-await client.connect();
 const db = client.db("hr_cerdas");
 const { kirimEmail } = require("../helpers/email");
 const { signToken, checkPassword, tokenCheck } = require("../misc/auth");
