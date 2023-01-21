@@ -2,10 +2,16 @@
 require("dotenv").config();
 // Menggunakan .env End
 const bcrypt = require("bcryptjs");
-const { MongoClient, ObjectId, Timestamp } = require("mongodb");
+const {
+  MongoClient,
+  ObjectId,
+  Timestamp,
+  ServerApiVersion,
+} = require("mongodb");
 const client = new MongoClient(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
 });
 const db = client.db("hr_cerdas");
 const { kirimEmail } = require("../helpers/email");
