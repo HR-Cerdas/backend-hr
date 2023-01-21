@@ -95,7 +95,7 @@ const register = async (req, res, next) => {
     });
     // Register Input End
 
-    res.json({ status: "Created", msg: "Register Berhasil" });
+    res.status(200).json({ status: "Created", msg: "Register Berhasil" });
   } catch (e) {
     res.status(404).json({ msg: e });
   }
