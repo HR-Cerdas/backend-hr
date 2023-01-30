@@ -6,7 +6,7 @@ RUN mkdir -p /app/node_modules/
 
 COPY package*.json ./
 
-COPY yarn*.json ./
+#COPY yarn*.json ./
 
 RUN chown -R node:node /app/
 
