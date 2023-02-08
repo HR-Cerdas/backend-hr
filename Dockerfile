@@ -6,6 +6,8 @@ RUN mkdir -p /app/node_modules/
 
 COPY package*.json ./
 
+RUN npm install cors
+
 #COPY yarn*.json ./
 
 RUN chown -R node:node /app/
